@@ -1,0 +1,45 @@
+[project]
+name = "timebeing-backend"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Marcos Queiroz",email = "marcosamfq123@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.13,<4.0"
+dependencies = [
+    "sqlalchemy[asyncio] (>=2.0.41,<3.0.0)",
+    "alembic (>=1.16.2,<2.0.0)",
+    "fastapi[standard] (>=0.115.13,<0.116.0)",
+    "psycopg[binary] (>=3.2.9,<4.0.0)",
+    "pydantic-settings (>=2.10.0,<3.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.12.0"
+taskipy = "^1.14.1"
+
+[tool.ruff]
+line-length = 79
+extend-exclude = ['migrations']
+
+[tool.ruff.lint]
+preview = true
+select = ['I','F','E','W','PL','PT','FAST']
+
+[tool.ruff.format]
+preview = true
+quote-style = 'single'
+
+[tool.taskipy.tasks]
+lint = 'ruff check .'
+pre_format = 'ruff check --fix'
+format = 'ruff format .'
+
+run = 'fastapi dev timebeing_backend/main.py '
+
