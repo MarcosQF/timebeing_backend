@@ -21,8 +21,7 @@ class HabitSoftUpdate(BaseModel):
     title: str | None = None
     description: str | None = None
     current_score: int | None = None
-    
+
 
 class Message(BaseModel):
     message: str
-
