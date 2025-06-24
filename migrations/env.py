@@ -8,6 +8,7 @@ from timebeing_backend.database import Base
 from alembic import context
 
 from timebeing_backend.models.habit import Habit
+from timebeing_backend.models.task import Task
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

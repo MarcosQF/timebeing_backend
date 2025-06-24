@@ -28,7 +28,9 @@ class CRUDHabit:
 
     @staticmethod
     async def get_habit(session: T_Session, habit_id: uuid.UUID):
-        db_habit = await session.scalar(Select(Habit).where(Habit.id == habit_id))
+        db_habit = await session.scalar(
+            Select(Habit).where(Habit.id == habit_id)
+        )
 
         if not db_habit:
             raise HTTPException(
@@ -40,7 +42,9 @@ class CRUDHabit:
 
     @staticmethod
     async def delete_habit(session: T_Session, habit_id: uuid.UUID):
-        db_habit = await session.scalar(Select(Habit).where(Habit.id == habit_id))
+        db_habit = await session.scalar(
+            Select(Habit).where(Habit.id == habit_id)
+        )
 
         if not db_habit:
             raise HTTPException(
@@ -52,8 +56,12 @@ class CRUDHabit:
         await session.commit()
 
     @staticmethod
-    async def patch_habit(session: T_Session, habit_id: uuid.UUID, habit: HabitSoftUpdate):
-        db_habit = await session.scalar(Select(Habit).where(Habit.id == habit_id))
+    async def patch_habit(
+        session: T_Session, habit_id: uuid.UUID, habit: HabitSoftUpdate
+    ):
+        db_habit = await session.scalar(
+            Select(Habit).where(Habit.id == habit_id)
+        )
 
         if not db_habit:
             raise HTTPException(
