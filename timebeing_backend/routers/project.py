@@ -21,7 +21,7 @@ router = APIRouter(prefix='/projects', tags=['projects'])
 @router.get(
     '/{project_id}', status_code=HTTPStatus.OK, response_model=ProjectPublic
 )
-async def get_porject_by_id(session: T_Session, project_id: uuid.UUID):
+async def get_project_by_id(session: T_Session, project_id: uuid.UUID):
     db_project = await CRUDProject.get_project_by_id(
         session=session, project_id=project_id
     )
