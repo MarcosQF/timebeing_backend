@@ -68,3 +68,19 @@ class CRUDTask:
         await session.refresh(db_task)
 
         return db_task
+
+    @staticmethod
+    async def list_subtasks(session: T_Session, task_id: uuid.UUID):
+        db_task = await session.scalar(Select(Task).where(Task.id == task_id))
+
+        if not db_task:
+            raise HTTPException(
+                status_code=HTTPStatus.NOT_FOUND,
+                detail='Parent task not found',
+            )
+
+        db_subtasks = await session.scalars(
+            Select(Task).where(Task.parent_task_id == task_id)
+        )
+
+        return db_subtasks

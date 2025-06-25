@@ -6,6 +6,7 @@ from sqlalchemy import Select
 
 from timebeing_backend.database import T_Session
 from timebeing_backend.models.project import Project
+from timebeing_backend.models.task import Task
 from timebeing_backend.schemas.project import (
     ProjectCreate,
     ProjectSoftUpdate,
@@ -77,3 +78,20 @@ class CRUDProject:
         await session.refresh(db_project)
 
         return db_project
+
+    @staticmethod
+    async def list_tasks(session: T_Session, project_id: uuid.UUID):
+        db_project = await session.scalar(
+            Select(Project).where(Project.id == project_id)
+        )
+
+        if not db_project:
+            raise HTTPException(
+                status_code=HTTPStatus.NOT_FOUND, detail='Project not found'
+            )
+
+        db_tasks = await session.scalars(
+            Select(Task).where(Task.project_id == project_id)
+        )
+
+        return db_tasks

@@ -12,6 +12,7 @@ from ..schemas.project import (
     ProjectList,
     ProjectPublic,
     ProjectSoftUpdate,
+    ProjectTasks,
 )
 
 router = APIRouter(prefix='/projects', tags=['projects'])
@@ -33,6 +34,19 @@ async def list_projects(session: T_Session):
     db_projects = await CRUDProject.list_projects(session=session)
 
     return {'projects': db_projects}
+
+
+@router.get(
+    '/{project_id}/tasks',
+    status_code=HTTPStatus.OK,
+    response_model=ProjectTasks,
+)
+async def list_tasks(session: T_Session, project_id: uuid.UUID):
+    db_tasks = await CRUDProject.list_tasks(
+        session=session, project_id=project_id
+    )
+
+    return {'tasks': db_tasks}
 
 
 @router.post('/', status_code=HTTPStatus.CREATED, response_model=ProjectPublic)

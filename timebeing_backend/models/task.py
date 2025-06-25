@@ -1,10 +1,12 @@
+from __future__ import annotations
+
 import uuid
 from datetime import datetime
 from decimal import Decimal
 from enum import Enum
 
-from sqlalchemy import UUID, Numeric
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import UUID, ForeignKey, Numeric
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.types import DateTime
 
 from ..database import Base
@@ -41,6 +43,21 @@ class Task(TimestampMixin):
         Numeric(10, 7), nullable=True
     )
     ai_context_text: Mapped[str | None] = mapped_column(nullable=True)
+
+    parent_task_id: Mapped[uuid.UUID | None] = mapped_column(
+        ForeignKey('task.id'), nullable=True
+    )
+    project_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey('project.id'), nullable=True
+    )
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, init=False
+    )
+
+    pai: Mapped[Task | None] = relationship(
+        'Task', back_populates='subtasks', remote_side=[id], init=False
+    )
+
+    subtasks: Mapped[list[Task]] = relationship(
+        'Task', back_populates='pai', cascade='all, delete-orphan', init=False
     )

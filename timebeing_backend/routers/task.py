@@ -26,6 +26,17 @@ async def get_task_by_id(session: T_Session, task_id: uuid.UUID):
     return db_task
 
 
+@router.get(
+    '/{task_id}/subtasks', status_code=HTTPStatus.OK, response_model=TaskList
+)
+async def list_subtasks(session: T_Session, task_id: uuid.UUID):
+    db_subtasks = await CRUDTask.list_subtasks(
+        session=session, task_id=task_id
+    )
+
+    return {'tasks': db_subtasks}
+
+
 @router.post('/', status_code=HTTPStatus.CREATED, response_model=TaskPublic)
 async def create_task(session: T_Session, task: TaskCreate):
     db_task = await CRUDTask.create_task(session=session, task=task)

@@ -2,7 +2,9 @@ import uuid
 from enum import Enum
 
 from sqlalchemy import UUID
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from timebeing_backend.models.task import Task
 
 from ..database import Base
 from .commom_mixins import TimestampMixin
@@ -24,4 +26,8 @@ class Project(TimestampMixin):
     ai_context_text: Mapped[str | None] = mapped_column(nullable=True)
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, init=False
+    )
+
+    tasks: Mapped[list['Task']] = relationship(
+        init=False, cascade='all, delete-orphan', lazy='selectin'
     )
