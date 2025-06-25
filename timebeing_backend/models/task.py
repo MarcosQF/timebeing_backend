@@ -47,7 +47,7 @@ class Task(TimestampMixin):
     parent_task_id: Mapped[uuid.UUID | None] = mapped_column(
         ForeignKey('task.id'), nullable=True
     )
-    project_id: Mapped[uuid.UUID] = mapped_column(
+    project_id: Mapped[uuid.UUID | None] = mapped_column(
         ForeignKey('project.id'), nullable=True
     )
     id: Mapped[uuid.UUID] = mapped_column(

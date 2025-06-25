@@ -35,6 +35,9 @@ class TaskPublic(BaseModel):
     location_text: str | None
     location_lat: Decimal | None
     location_lon: Decimal | None
+    ai_context_text: str | None
+    created_at: datetime
+    updated_at: datetime
 
 
 class TaskList(BaseModel):
