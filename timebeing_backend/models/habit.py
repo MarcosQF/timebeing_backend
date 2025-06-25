@@ -12,9 +12,9 @@ class Habit(TimestampMixin):
     __tablename__ = 'habit'
 
     title: Mapped[str]
-    description: Mapped[str]
-    current_score: Mapped[int]
-    ai_context_prompt: Mapped[str] = mapped_column(default='')
+    description: Mapped[str] = mapped_column(nullable=True)
+    current_score: Mapped[int] = mapped_column(nullable=True)
+    ai_context_prompt: Mapped[str] = mapped_column(nullable=True)
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, init=False
     )
