@@ -204,7 +204,7 @@ Delete a task.
 **Response**: `200 OK`
 ```json
 {
-  "message": "Task has been deleted succesfully"
+  "message": "Task has been deleted successfully"
 }
 ```
 
