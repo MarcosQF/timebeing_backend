@@ -34,8 +34,7 @@ class CRUDHabit:
 
         if not db_habit:
             raise HTTPException(
-                status_code=HTTPStatus.NOT_FOUND,
-                detail='habit not found'
+                status_code=HTTPStatus.NOT_FOUND, detail='habit not found'
             )
 
         return db_habit
@@ -48,8 +47,7 @@ class CRUDHabit:
 
         if not db_habit:
             raise HTTPException(
-                status_code=HTTPStatus.NOT_FOUND,
-                detail='habit not found'
+                status_code=HTTPStatus.NOT_FOUND, detail='habit not found'
             )
 
         await session.delete(db_habit)
@@ -65,8 +63,7 @@ class CRUDHabit:
 
         if not db_habit:
             raise HTTPException(
-                status_code=HTTPStatus.NOT_FOUND,
-                detail='habit not found'
+                status_code=HTTPStatus.NOT_FOUND, detail='habit not found'
             )
 
         for key, value in habit.model_dump(exclude_unset=True).items():

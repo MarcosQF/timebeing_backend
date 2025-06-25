@@ -27,7 +27,6 @@ async def list_habits(session: T_Session):
     '/{habit_id}', status_code=HTTPStatus.OK, response_model=HabitPublic
 )
 async def get_habit_by_id(session: T_Session, habit_id: uuid.UUID):
-
     db_habit = await CRUDHabit.get_habit(session=session, habit_id=habit_id)
 
     return db_habit
