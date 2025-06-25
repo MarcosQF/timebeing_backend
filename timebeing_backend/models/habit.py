@@ -16,8 +16,5 @@ class Habit(TimestampMixin):
     current_score: Mapped[int]
     ai_context_prompt: Mapped[str] = mapped_column(default='')
     id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True),
-        primary_key=True,
-        default=uuid.uuid4,
-        init=False
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, init=False
     )

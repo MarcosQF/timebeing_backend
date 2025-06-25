@@ -32,8 +32,7 @@ class CRUDTask:
 
         if not db_task:
             raise HTTPException(
-                status_code=HTTPStatus.NOT_FOUND,
-                detail='Task not found'
+                status_code=HTTPStatus.NOT_FOUND, detail='Task not found'
             )
 
         return db_task
@@ -44,8 +43,7 @@ class CRUDTask:
 
         if not db_task:
             raise HTTPException(
-                status_code=HTTPStatus.NOT_FOUND,
-                detail='Task not found'
+                status_code=HTTPStatus.NOT_FOUND, detail='Task not found'
             )
 
         await session.delete(db_task)
@@ -59,8 +57,7 @@ class CRUDTask:
 
         if not db_task:
             raise HTTPException(
-                status_code=HTTPStatus.NOT_FOUND,
-                detail='Task not found'
+                status_code=HTTPStatus.NOT_FOUND, detail='Task not found'
             )
 
         for key, value in task.model_dump(exclude_unset=True).items():

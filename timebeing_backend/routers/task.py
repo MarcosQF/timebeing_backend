@@ -9,10 +9,7 @@ from ..cruds.task import CRUDTask
 from ..database import T_Session
 from ..schemas.task import TaskCreate, TaskList, TaskPublic, TaskSoftUpdate
 
-router = APIRouter(
-    prefix='/tasks',
-    tags=['tasks']
-)
+router = APIRouter(prefix='/tasks', tags=['tasks'])
 
 
 @router.get('/', status_code=HTTPStatus.OK, response_model=TaskList)
@@ -22,9 +19,7 @@ async def list_tasks(session: T_Session):
     return {'tasks': db_tasks}
 
 
-@router.get(
-    '/{task_id}', status_code=HTTPStatus.OK, response_model=TaskPublic
-)
+@router.get('/{task_id}', status_code=HTTPStatus.OK, response_model=TaskPublic)
 async def get_task_by_id(session: T_Session, task_id: uuid.UUID):
     db_task = await CRUDTask.get_task_by_id(session=session, task_id=task_id)
 
@@ -32,10 +27,7 @@ async def get_task_by_id(session: T_Session, task_id: uuid.UUID):
 
 
 @router.post('/', status_code=HTTPStatus.CREATED, response_model=TaskPublic)
-async def create_task(
-    session: T_Session,
-    task: TaskCreate
-):
+async def create_task(session: T_Session, task: TaskCreate):
     db_task = await CRUDTask.create_task(session=session, task=task)
 
     return db_task

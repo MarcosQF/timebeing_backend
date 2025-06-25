@@ -1,0 +1,27 @@
+import uuid
+from enum import Enum
+
+from sqlalchemy import UUID
+from sqlalchemy.orm import Mapped, mapped_column
+
+from ..database import Base
+from .commom_mixins import TimestampMixin
+
+
+class ProjectStatus(str, Enum):
+    criado = 'Criado'
+    andamento = 'Andamento'
+    concluido = 'Concluído'
+
+
+@Base.mapped_as_dataclass
+class Project(TimestampMixin):
+    __tablename__ = 'project'
+
+    title: Mapped[str]
+    description: Mapped[str | None] = mapped_column(nullable=True)
+    status: Mapped[ProjectStatus]
+    ai_context_text: Mapped[str | None] = mapped_column(nullable=True)
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, init=False
+    )
