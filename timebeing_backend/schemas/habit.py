@@ -7,6 +7,7 @@ class HabitCreate(BaseModel):
     title: str
     description: str | None = None
     current_score: int | None = Field(ge=0, default=None)
+    ai_context_prompt: str | None = None
 
 
 class HabitPublic(HabitCreate):
@@ -21,6 +22,7 @@ class HabitSoftUpdate(BaseModel):
     title: str | None = None
     description: str | None = None
     current_score: int | None = None
+    ai_context_prompt: str | None = None
 
 
 class Message(BaseModel):

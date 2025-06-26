@@ -384,7 +384,8 @@ List all habits.
       "id": "uuid",
       "title": "string", 
       "description": "string | null",
-      "current_score": "integer | null"
+      "current_score": "integer | null",
+      "ai_context_prompt": "string | null"
     }
   ]
 }
@@ -402,7 +403,8 @@ Get a specific habit by ID.
   "id": "uuid",
   "title": "string",
   "description": "string | null",
-  "current_score": "integer | null"
+  "current_score": "integer | null",
+  "ai_context_prompt": "string | null"
 }
 ```
 
@@ -421,7 +423,8 @@ Create a new habit.
 {
   "title": "string",
   "description": "string | null",
-  "current_score": "integer | null" // minimum: 0
+  "current_score": "integer | null", // minimum: 0
+  "ai_context_prompt": "string | null"
 }
 ```
 
@@ -431,7 +434,8 @@ Create a new habit.
   "id": "uuid",
   "title": "string",
   "description": "string | null",
-  "current_score": "integer | null"
+  "current_score": "integer | null",
+  "ai_context_prompt": "string | null"
 }
 ```
 
@@ -446,7 +450,8 @@ Partially update a habit.
 {
   "title": "string",
   "description": "string | null",
-  "current_score": "integer | null"
+  "current_score": "integer | null",
+  "ai_context_prompt": "string | null"
 }
 ```
 
@@ -456,7 +461,8 @@ Partially update a habit.
   "id": "uuid",
   "title": "string",
   "description": "string | null",
-  "current_score": "integer | null"
+  "current_score": "integer | null",
+  "ai_context_prompt": "string | null"
 }
 ```
 
