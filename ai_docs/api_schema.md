@@ -35,7 +35,8 @@ List all tasks.
       "duration_estimate_blocks": "integer | null",
       "location_text": "string | null",
       "location_lat": "decimal | null",
-      "location_lon": "decimal | null"
+      "location_lon": "decimal | null",
+      "is_focus": "boolean"
     }
   ]
 }
@@ -61,7 +62,8 @@ Get a specific task by ID.
   "duration_estimate_blocks": "integer | null",
   "location_text": "string | null",
   "location_lat": "decimal | null",
-  "location_lon": "decimal | null"
+  "location_lon": "decimal | null",
+  "is_focus": "boolean"
 }
 ```
 
@@ -94,7 +96,8 @@ List all subtasks of a specific task.
       "duration_estimate_blocks": "integer | null",
       "location_text": "string | null",
       "location_lat": "decimal | null",
-      "location_lon": "decimal | null"
+      "location_lon": "decimal | null",
+      "is_focus": "boolean"
     }
   ]
 }
@@ -123,6 +126,7 @@ Create a new task.
   "location_lat": "decimal | null",
   "location_lon": "decimal | null",
   "ai_context_text": "string | null",
+  "is_focus": "boolean", // default: false
   "parent_task_id": "uuid | null",
   "project_id": "uuid | null"
 }
@@ -142,7 +146,8 @@ Create a new task.
   "duration_estimate_blocks": "integer | null",
   "location_text": "string | null",
   "location_lat": "decimal | null",
-  "location_lon": "decimal | null"
+  "location_lon": "decimal | null",
+  "is_focus": "boolean"
 }
 ```
 
@@ -166,7 +171,8 @@ Partially update a task.
   "location_text": "string | null",
   "location_lat": "decimal | null",
   "location_lon": "decimal | null",
-  "ai_context_text": "string | null"
+  "ai_context_text": "string | null",
+  "is_focus": "boolean"
 }
 ```
 
@@ -184,7 +190,8 @@ Partially update a task.
   "duration_estimate_blocks": "integer | null",
   "location_text": "string | null",
   "location_lat": "decimal | null",
-  "location_lon": "decimal | null"
+  "location_lon": "decimal | null",
+  "is_focus": "boolean"
 }
 ```
 
@@ -281,7 +288,8 @@ List all tasks belonging to a specific project.
       "duration_estimate_blocks": "integer | null",
       "location_text": "string | null",
       "location_lat": "decimal | null",
-      "location_lon": "decimal | null"
+      "location_lon": "decimal | null",
+      "is_focus": "boolean"
     }
   ]
 }
@@ -507,6 +515,7 @@ Delete a habit.
 - **location_lat**: decimal (optional, precision 10,7)
 - **location_lon**: decimal (optional, precision 10,7)
 - **ai_context_text**: string (optional)
+- **is_focus**: boolean (default: false)
 - **parent_task_id**: UUID (optional, self-referencing foreign key)
 - **project_id**: UUID (optional, foreign key to projects)
 - **created_at**: datetime (auto-generated)

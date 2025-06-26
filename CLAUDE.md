@@ -72,6 +72,7 @@ timebeing_backend/
 - Priority: Baixa, Média, Alta
 - Location support (text + lat/lon coordinates)
 - Duration estimation in "blocks"
+- Focus flag (is_focus) for marking priority tasks
 
 **Project Model** (`models/project.py`):
 - One-to-many with Tasks (cascade delete)
