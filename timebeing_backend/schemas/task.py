@@ -18,6 +18,7 @@ class TaskCreate(BaseModel):
     location_lat: Decimal | None = None
     location_lon: Decimal | None = None
     ai_context_text: str | None = None
+    is_focus: bool = Field(default=False)
     parent_task_id: uuid.UUID | None = None
     project_id: uuid.UUID | None = None
 
@@ -36,6 +37,7 @@ class TaskPublic(BaseModel):
     location_lat: Decimal | None
     location_lon: Decimal | None
     ai_context_text: str | None
+    is_focus: bool
     created_at: datetime
     updated_at: datetime
 
@@ -57,3 +59,4 @@ class TaskSoftUpdate(BaseModel):
     location_lat: Decimal | None = None
     location_lon: Decimal | None = None
     ai_context_text: str | None = None
+    is_focus: bool | None = None
