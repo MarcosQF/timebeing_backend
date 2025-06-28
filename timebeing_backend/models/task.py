@@ -5,7 +5,7 @@ from datetime import datetime
 from decimal import Decimal
 from enum import Enum
 
-from sqlalchemy import UUID, ForeignKey, Numeric, Boolean
+from sqlalchemy import UUID, Boolean, ForeignKey, Numeric
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.types import DateTime
 
@@ -50,9 +50,14 @@ class Task(TimestampMixin):
     project_id: Mapped[uuid.UUID | None] = mapped_column(
         ForeignKey('project.id'), nullable=True
     )
-    is_focus: Mapped[bool] = mapped_column(Boolean, default=False, server_default='false', nullable=False)
+    is_focus: Mapped[bool] = mapped_column(
+        Boolean, default=False, server_default='false', nullable=False
+    )
     id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, init=False
+        UUID(as_uuid=True),
+        primary_key=True,
+        default=uuid.uuid4,
+        init=False
     )
 
     pai: Mapped[Task | None] = relationship(
