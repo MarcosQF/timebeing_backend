@@ -32,3 +32,13 @@ class ProjectSoftUpdate(BaseModel):
 
 class ProjectTasks(BaseModel):
     tasks: list[TaskPublic]
+
+
+class ProjectStatusOption(BaseModel):
+    value: str
+    label: str
+    description: str
+
+
+class ProjectStatusOptions(BaseModel):
+    status_options: list[ProjectStatusOption]

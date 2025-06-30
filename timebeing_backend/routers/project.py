@@ -13,9 +13,36 @@ from ..schemas.project import (
     ProjectPublic,
     ProjectSoftUpdate,
     ProjectTasks,
+    ProjectStatusOptions,
 )
 
 router = APIRouter(prefix='/projects', tags=['projects'])
+
+
+@router.get('/status-options', status_code=HTTPStatus.OK, response_model=ProjectStatusOptions)
+async def get_project_status_options():
+    """Get available project status options with labels and descriptions."""
+    from timebeing_backend.models.project import ProjectStatus
+    
+    status_options = [
+        {
+            "value": ProjectStatus.criado.value,
+            "label": "Planejamento", 
+            "description": "Projeto em fase de planejamento"
+        },
+        {
+            "value": ProjectStatus.andamento.value,
+            "label": "Em Andamento",
+            "description": "Projeto ativo em desenvolvimento"
+        },
+        {
+            "value": ProjectStatus.concluido.value,
+            "label": "Concluído",
+            "description": "Projeto finalizado com sucesso"
+        }
+    ]
+    
+    return {"status_options": status_options}
 
 
 @router.get(
