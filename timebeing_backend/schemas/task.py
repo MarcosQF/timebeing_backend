@@ -25,13 +25,13 @@ class TaskCreate(BaseModel):
 
 class TaskPublic(BaseModel):
     id: uuid.UUID
-    title: str 
+    title: str
     parent_task_id: uuid.UUID | None
     project_id: uuid.UUID | None
     description: str | None
     due_date: datetime | None
-    status: TaskStatus 
-    priority: TaskPriorityState 
+    status: TaskStatus
+    priority: TaskPriorityState
     duration_estimate_blocks: int | None
     location_text: str | None
     location_lat: Decimal | None
