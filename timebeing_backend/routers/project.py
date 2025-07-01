@@ -5,6 +5,7 @@ from fastapi import APIRouter
 
 from timebeing_backend.cruds.project import CRUDProject
 from timebeing_backend.database import T_Session
+from timebeing_backend.models.project import ProjectStatus
 from timebeing_backend.schemas.habit import Message
 
 from ..schemas.project import (
@@ -12,22 +13,25 @@ from ..schemas.project import (
     ProjectList,
     ProjectPublic,
     ProjectSoftUpdate,
-    ProjectTasks,
     ProjectStatusOptions,
+    ProjectTasks,
 )
 
 router = APIRouter(prefix='/projects', tags=['projects'])
 
 
-@router.get('/status-options', status_code=HTTPStatus.OK, response_model=ProjectStatusOptions)
+@router.get(
+    '/status-options',
+    status_code=HTTPStatus.OK,
+    response_model=ProjectStatusOptions,
+)
 async def get_project_status_options():
     """Get available project status options with labels and descriptions."""
-    from timebeing_backend.models.project import ProjectStatus
-    
+
     status_options = [
         {
             "value": ProjectStatus.criado.value,
-            "label": "Planejamento", 
+            "label": "Planejamento",
             "description": "Projeto em fase de planejamento"
         },
         {
@@ -41,7 +45,7 @@ async def get_project_status_options():
             "description": "Projeto finalizado com sucesso"
         }
     ]
-    
+
     return {"status_options": status_options}
 
 
