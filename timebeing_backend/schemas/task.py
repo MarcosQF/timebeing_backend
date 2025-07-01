@@ -11,6 +11,8 @@ class TaskCreate(BaseModel):
     title: str
     description: str | None = None
     due_date: datetime | None = None
+    scheduled_start_time: datetime | None = None
+    scheduled_end_time: datetime | None = None
     status: TaskStatus = Field(default=TaskStatus.aberta)
     priority: TaskPriorityState = Field(default=TaskPriorityState.baixa)
     duration_estimate_blocks: int | None = None
@@ -30,6 +32,8 @@ class TaskPublic(BaseModel):
     project_id: uuid.UUID | None
     description: str | None
     due_date: datetime | None
+    scheduled_start_time: datetime | None
+    scheduled_end_time: datetime | None
     status: TaskStatus
     priority: TaskPriorityState
     duration_estimate_blocks: int | None
@@ -52,6 +56,8 @@ class TaskSoftUpdate(BaseModel):
     project_id: uuid.UUID | None = None
     description: str | None = None
     due_date: datetime | None = None
+    scheduled_start_time: datetime | None = None
+    scheduled_end_time: datetime | None = None
     status: TaskStatus | None = None
     priority: TaskPriorityState | None = None
     duration_estimate_blocks: int | None = None

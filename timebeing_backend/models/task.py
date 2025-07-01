@@ -32,6 +32,8 @@ class Task(TimestampMixin):
     title: Mapped[str]
     description: Mapped[str | None] = mapped_column(nullable=True)
     due_date: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    scheduled_start_time: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    scheduled_end_time: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     status: Mapped[TaskStatus]
     priority: Mapped[TaskPriorityState]
     duration_estimate_blocks: Mapped[int | None] = mapped_column(nullable=True)
