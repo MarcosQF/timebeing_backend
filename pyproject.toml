@@ -24,6 +24,13 @@ build-backend = "poetry.core.masonry.api"
 ruff = "^0.12.0"
 taskipy = "^1.14.1"
 
+
+[tool.poetry.group.otel.dependencies]
+opentelemetry-distro = "^0.56b0"
+opentelemetry-exporter-otlp = "^1.35.0"
+opentelemetry-instrumentation-psycopg = "^0.56b0"
+opentelemetry-instrumentation-fastapi = "^0.56b0"
+
 [tool.ruff]
 line-length = 79
 extend-exclude = ['migrations']
