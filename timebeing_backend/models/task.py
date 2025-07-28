@@ -32,7 +32,6 @@ class Task(TimestampMixin):
     scheduled_end_time: Mapped[datetime | None] = mapped_column(
         DateTime, nullable=True
     )
-    status: bool
     priority: Mapped[TaskPriorityState]
     duration_estimate_blocks: Mapped[int | None] = mapped_column(nullable=True)
     location_text: Mapped[str | None] = mapped_column(nullable=True)
@@ -51,6 +50,9 @@ class Task(TimestampMixin):
         ForeignKey('project.id'), nullable=True
     )
     is_focus: Mapped[bool] = mapped_column(
+        Boolean, default=False, server_default='false', nullable=False
+    )
+    status: Mapped[bool] = mapped_column(
         Boolean, default=False, server_default='false', nullable=False
     )
     id: Mapped[uuid.UUID] = mapped_column(

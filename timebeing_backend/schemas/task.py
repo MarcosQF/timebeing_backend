@@ -13,7 +13,7 @@ class TaskCreate(BaseModel):
     due_date: datetime | None = None
     scheduled_start_time: datetime | None = None
     scheduled_end_time: datetime | None = None
-    status: bool = Field(False)
+    status: bool = Field(default=False)
     priority: TaskPriorityState = Field(default=TaskPriorityState.baixa)
     duration_estimate_blocks: int | None = None
     location_text: str | None = None

@@ -14,6 +14,7 @@ class ProjectCreate(BaseModel):
     title: str
     description: str | None = None
     status: ProjectStatus = Field(default=ProjectStatus.criado)
+    priority: ProjectPriorityState = Field(default=ProjectPriorityState.baixa)
     ai_context_text: str | None = None
 
 
@@ -25,7 +26,7 @@ class ProjectPublic(BaseModel):
     priority: ProjectPriorityState
     created_at: datetime
     updated_at: datetime
-    ai_context_prompt: str
+    ai_context_text: str | None
 
 
 class ProjectList(BaseModel):
