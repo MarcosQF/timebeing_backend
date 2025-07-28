@@ -4,7 +4,7 @@ from decimal import Decimal
 
 from pydantic import BaseModel, Field
 
-from timebeing_backend.models.task import TaskPriorityState, TaskStatus
+from timebeing_backend.models.task import TaskPriorityState
 
 
 class TaskCreate(BaseModel):
@@ -13,7 +13,7 @@ class TaskCreate(BaseModel):
     due_date: datetime | None = None
     scheduled_start_time: datetime | None = None
     scheduled_end_time: datetime | None = None
-    status: TaskStatus = Field(default=TaskStatus.aberta)
+    status: bool = Field(False)
     priority: TaskPriorityState = Field(default=TaskPriorityState.baixa)
     duration_estimate_blocks: int | None = None
     location_text: str | None = None
@@ -34,7 +34,7 @@ class TaskPublic(BaseModel):
     due_date: datetime | None
     scheduled_start_time: datetime | None
     scheduled_end_time: datetime | None
-    status: TaskStatus
+    status: bool
     priority: TaskPriorityState
     duration_estimate_blocks: int | None
     location_text: str | None
@@ -58,7 +58,7 @@ class TaskSoftUpdate(BaseModel):
     due_date: datetime | None = None
     scheduled_start_time: datetime | None = None
     scheduled_end_time: datetime | None = None
-    status: TaskStatus | None = None
+    status: bool | None = None
     priority: TaskPriorityState | None = None
     duration_estimate_blocks: int | None = None
     location_text: str | None = None

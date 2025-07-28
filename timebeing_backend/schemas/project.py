@@ -1,8 +1,12 @@
 import uuid
+from datetime import datetime
 
 from pydantic import BaseModel, Field
 
-from timebeing_backend.models.project import ProjectStatus
+from timebeing_backend.models.project import (
+    ProjectPriorityState,
+    ProjectStatus,
+)
 from timebeing_backend.schemas.task import TaskPublic
 
 
@@ -18,6 +22,10 @@ class ProjectPublic(BaseModel):
     title: str
     description: str | None
     status: ProjectStatus
+    priority: ProjectPriorityState
+    created_at: datetime
+    updated_at: datetime
+    ai_context_prompt: str
 
 
 class ProjectList(BaseModel):
@@ -28,6 +36,7 @@ class ProjectSoftUpdate(BaseModel):
     title: str | None = None
     description: str | None = None
     status: ProjectStatus | None = None
+    priority: ProjectPriorityState | None = None
 
 
 class ProjectTasks(BaseModel):

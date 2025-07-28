@@ -1,4 +1,5 @@
 import uuid
+from datetime import datetime
 
 from pydantic import BaseModel, Field
 
@@ -12,6 +13,8 @@ class HabitCreate(BaseModel):
 
 class HabitPublic(HabitCreate):
     id: uuid.UUID
+    created_at: datetime
+    updated_at: datetime
 
 
 class HabitList(BaseModel):

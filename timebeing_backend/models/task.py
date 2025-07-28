@@ -13,12 +13,6 @@ from ..database import Base
 from .commom_mixins import TimestampMixin
 
 
-class TaskStatus(str, Enum):
-    aberta = 'Aberta'
-    andamento = 'Andamento'
-    concluida = 'Concluída'
-
-
 class TaskPriorityState(str, Enum):
     baixa = 'Baixa'
     media = 'Média'
@@ -38,7 +32,7 @@ class Task(TimestampMixin):
     scheduled_end_time: Mapped[datetime | None] = mapped_column(
         DateTime, nullable=True
     )
-    status: Mapped[TaskStatus]
+    status: bool
     priority: Mapped[TaskPriorityState]
     duration_estimate_blocks: Mapped[int | None] = mapped_column(nullable=True)
     location_text: Mapped[str | None] = mapped_column(nullable=True)
@@ -60,10 +54,7 @@ class Task(TimestampMixin):
         Boolean, default=False, server_default='false', nullable=False
     )
     id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True),
-        primary_key=True,
-        default=uuid.uuid4,
-        init=False
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, init=False
     )
 
     pai: Mapped[Task | None] = relationship(
