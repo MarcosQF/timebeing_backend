@@ -30,23 +30,23 @@ async def get_project_status_options():
 
     status_options = [
         {
-            "value": ProjectStatus.criado.value,
-            "label": "Planejamento",
-            "description": "Projeto em fase de planejamento"
+            'value': ProjectStatus.criado.value,
+            'label': 'Planejamento',
+            'description': 'Projeto em fase de planejamento',
         },
         {
-            "value": ProjectStatus.andamento.value,
-            "label": "Em Andamento",
-            "description": "Projeto ativo em desenvolvimento"
+            'value': ProjectStatus.andamento.value,
+            'label': 'Em Andamento',
+            'description': 'Projeto ativo em desenvolvimento',
         },
         {
-            "value": ProjectStatus.concluido.value,
-            "label": "Concluído",
-            "description": "Projeto finalizado com sucesso"
-        }
+            'value': ProjectStatus.concluido.value,
+            'label': 'Concluído',
+            'description': 'Projeto finalizado com sucesso',
+        },
     ]
 
-    return {"status_options": status_options}
+    return {'status_options': status_options}
 
 
 @router.get(

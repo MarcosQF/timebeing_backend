@@ -16,6 +16,12 @@ class ProjectStatus(str, Enum):
     concluido = 'Concluído'
 
 
+class ProjectPriorityState(str, Enum):
+    baixa = 'Baixa'
+    media = 'Média'
+    alta = 'Alta'
+
+
 @Base.mapped_as_dataclass
 class Project(TimestampMixin):
     __tablename__ = 'project'
@@ -24,6 +30,9 @@ class Project(TimestampMixin):
     description: Mapped[str | None] = mapped_column(nullable=True)
     status: Mapped[ProjectStatus]
     ai_context_text: Mapped[str | None] = mapped_column(nullable=True)
+    priority: Mapped[ProjectPriorityState] = mapped_column(
+        default=ProjectPriorityState.baixa
+    )
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, init=False
     )
