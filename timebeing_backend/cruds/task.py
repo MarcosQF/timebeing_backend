@@ -73,9 +73,7 @@ class CRUDTask:
                 status_code=HTTPStatus.NOT_FOUND, detail='Task not found'
             )
 
-        logger.info(
-            f'Atualizando task {task_id} para {task.model_dump()}'
-        )
+        logger.info(f'Atualizando task {task_id} para {task.model_dump()}')
 
         for key, value in task.model_dump(exclude_unset=True).items():
             setattr(db_task, key, value)

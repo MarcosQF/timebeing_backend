@@ -80,9 +80,7 @@ class CRUDHabit:
                 status_code=HTTPStatus.NOT_FOUND, detail='habit not found'
             )
 
-        logger.info(
-            f'Atualizando habit {habit_id} para {habit.model_dump()}'
-        )
+        logger.info(f'Atualizando habit {habit_id} para {habit.model_dump()}')
 
         for key, value in habit.model_dump(exclude_unset=True).items():
             setattr(db_habit, key, value)
