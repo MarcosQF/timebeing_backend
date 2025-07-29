@@ -24,6 +24,13 @@ services:
         condition: service_healthy
     environment:
       DATABASE_URL: postgresql+psycopg://postgres:postgres@db:5432/timebeing
+      OTEL_SERVICE_NAME: FastApiTestes
+      OTEL_EXPORTER_OTLP_ENDPOINT: otel:4317
+      OTEL_EXPORTER_OTLP_INSECURE: true
+      OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED: true
+      OTEL_TRACES_EXPORTER: otlp
+      OTEL_METRICS_EXPORTER: otlp
+      OTEL_LOGS_EXPORTER: otlp
     volumes:
       - ./timebeing_backend:/app/timebeing_backend
       - ./alembic:/app/alembic
@@ -46,6 +53,12 @@ services:
       - db
     volumes:
       - pgadmin_data:/var/lib/pgadmin
+
+  otel:
+    image: grafana/otel-lgtm
+    ports:
+      - "3000:3000"
+      - "4317:4317"
 
 volumes:
   postgres_data:
