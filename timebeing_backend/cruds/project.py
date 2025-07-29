@@ -1,3 +1,4 @@
+import logging
 import uuid
 from http import HTTPStatus
 
@@ -12,10 +13,15 @@ from timebeing_backend.schemas.project import (
     ProjectSoftUpdate,
 )
 
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+logger.addHandler(logging.StreamHandler())
+
 
 class CRUDProject:
     @staticmethod
     async def create_project(session: T_Session, project: ProjectCreate):
+        logger.info(f'Criando project {project.model_dump()}')
         db_project = Project(**project.model_dump())
 
         session.add(db_project)
@@ -31,6 +37,7 @@ class CRUDProject:
         )
 
         if not db_project:
+            logger.warning(f'Project {project_id} não encontrado')
             raise HTTPException(
                 status_code=HTTPStatus.NOT_FOUND, detail='Project not found'
             )
@@ -45,11 +52,13 @@ class CRUDProject:
 
     @staticmethod
     async def delete_project(session: T_Session, project_id: uuid.UUID):
+        logger.info(f'Deletando project {project_id}')
         db_project = await session.scalar(
             Select(Project).where(Project.id == project_id)
         )
 
         if not db_project:
+            logger.warning(f'Project {project_id} não encontrado')
             raise HTTPException(
                 status_code=HTTPStatus.NOT_FOUND, detail='Project not found'
             )
@@ -66,9 +75,14 @@ class CRUDProject:
         )
 
         if not db_project:
+            logger.warning(f'Project {project_id} não encontrado')
             raise HTTPException(
                 status_code=HTTPStatus.NOT_FOUND, detail='Project not found'
             )
+
+        logger.info(
+            f'Atualizando project {project_id} para {project.model_dump()}',
+        )
 
         for key, value in project.model_dump(exclude_unset=True).items():
             setattr(db_project, key, value)
@@ -86,6 +100,7 @@ class CRUDProject:
         )
 
         if not db_project:
+            logger.warning(f'Project {project_id} não encontrado')
             raise HTTPException(
                 status_code=HTTPStatus.NOT_FOUND, detail='Project not found'
             )
@@ -93,5 +108,6 @@ class CRUDProject:
         db_tasks = await session.scalars(
             Select(Task).where(Task.project_id == project_id)
         )
+        logger.info(f'Consultando tasks do projeto {project_id}')
 
         return db_tasks
