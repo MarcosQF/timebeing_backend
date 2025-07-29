@@ -1,10 +1,25 @@
+import logging
+from contextlib import asynccontextmanager
+
 from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from timebeing_backend.routers import habit, project, task
 
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+logger.addHandler(logging.StreamHandler())
+
+
+@asynccontextmanager
+async def lifespan(app):
+    logger.info('Iniciando Aplicação')
+    yield
+    logger.info('Encerrando Aplicação')
+
+
 router = APIRouter(prefix='/api/v1')
-app = FastAPI()
+app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,

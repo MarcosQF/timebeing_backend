@@ -39,6 +39,7 @@ async def list_subtasks(session: T_Session, task_id: uuid.UUID):
 
 @router.post('/', status_code=HTTPStatus.CREATED, response_model=TaskPublic)
 async def create_task(session: T_Session, task: TaskCreate):
+
     db_task = await CRUDTask.create_task(session=session, task=task)
 
     return db_task
@@ -46,6 +47,7 @@ async def create_task(session: T_Session, task: TaskCreate):
 
 @router.delete('/{task_id}', status_code=HTTPStatus.OK, response_model=Message)
 async def delete_task(session: T_Session, task_id: uuid.UUID):
+
     await CRUDTask.delete_task(session=session, task_id=task_id)
 
     return {'message': 'Task has been deleted succesfully'}

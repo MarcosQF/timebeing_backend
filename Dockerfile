@@ -21,7 +21,7 @@ ENV POETRY_NO_INTERACTION=1 \
 COPY pyproject.toml ./
 
 # Install dependencies
-RUN poetry install --no-root --only main
+RUN poetry install --with otel --no-root
 
 # Copy application code
 COPY . .
