@@ -1,4 +1,3 @@
-import logging
 import uuid
 from http import HTTPStatus
 
@@ -13,9 +12,7 @@ from timebeing_backend.schemas.project import (
     ProjectSoftUpdate,
 )
 
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
-logger.addHandler(logging.StreamHandler())
+from ..logger import logger
 
 
 class CRUDProject:
