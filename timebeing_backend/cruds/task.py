@@ -1,4 +1,3 @@
-import logging
 import uuid
 from http import HTTPStatus
 
@@ -9,9 +8,7 @@ from timebeing_backend.database import T_Session
 from timebeing_backend.models.task import Task
 from timebeing_backend.schemas.task import TaskCreate, TaskSoftUpdate
 
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
-logger.addHandler(logging.StreamHandler())
+from ..logger import logger
 
 
 class CRUDTask:
