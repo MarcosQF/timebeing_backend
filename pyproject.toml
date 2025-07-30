@@ -12,7 +12,8 @@ dependencies = [
     "alembic (>=1.16.2,<2.0.0)",
     "fastapi[standard] (>=0.115.13,<0.116.0)",
     "psycopg[binary] (>=3.2.9,<4.0.0)",
-    "pydantic-settings (>=2.10.0,<3.0.0)"
+    "pydantic-settings (>=2.10.0,<3.0.0)",
+    "opentelemetry-instrumentation-logging (==0.56b0)"
 ]
 
 
@@ -23,6 +24,14 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.12.0"
 taskipy = "^1.14.1"
+
+
+[tool.poetry.group.otel.dependencies]
+opentelemetry-distro = "^0.56b0"
+opentelemetry-exporter-otlp = "^1.35.0"
+opentelemetry-instrumentation-psycopg = "^0.56b0"
+opentelemetry-instrumentation-fastapi = "^0.56b0"
+opentelemetry-instrumentation-logging = "0.56b0"
 
 [tool.ruff]
 line-length = 79

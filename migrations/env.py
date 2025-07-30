@@ -4,12 +4,12 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 from sqlalchemy.ext.asyncio import async_engine_from_config
 from timebeing_backend.settings import settings
-# from fastapi_testes.models.common_dependencies import base
+from timebeing_backend.database import Base
 from alembic import context
 
-# from fastapi_testes.models.user_model import User
-# from fastapi_testes.models.todo_model import Todo
-
+from timebeing_backend.models.habit import Habit
+from timebeing_backend.models.task import Task
+from timebeing_backend.models.project import Project
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -25,7 +25,7 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = base.metadata
+target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
