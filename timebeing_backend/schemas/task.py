@@ -30,6 +30,7 @@ class TaskPublic(BaseModel):
     title: str
     parent_task_id: uuid.UUID | None
     project_id: uuid.UUID | None
+    user_id: str
     description: str | None
     due_date: datetime | None
     scheduled_start_time: datetime | None

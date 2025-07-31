@@ -13,9 +13,11 @@ from ..logger import logger
 
 class CRUDHabit:
     @staticmethod
-    async def create_habit(session: T_Session, habit: HabitCreate):
-        logger.info(f'Criando habit {habit.model_dump()}')
-        db_habit = Habit(**habit.model_dump())
+    async def create_habit(session: T_Session, habit: HabitCreate, user_id: str):
+        logger.info(f'Criando habit {habit.model_dump()} para usuário {user_id}')
+        habit_data = habit.model_dump()
+        habit_data['user_id'] = user_id
+        db_habit = Habit(**habit_data)
 
         session.add(db_habit)
         await session.commit()
@@ -24,38 +26,38 @@ class CRUDHabit:
         return db_habit
 
     @staticmethod
-    async def list_habits(session: T_Session):
-        db_habits = await session.scalars(Select(Habit))
+    async def list_habits(session: T_Session, user_id: str):
+        db_habits = await session.scalars(Select(Habit).where(Habit.user_id == user_id))
 
-        logger.info('listou os habits')
+        logger.info(f'Listou os habits do usuário {user_id}')
 
         return db_habits
 
     @staticmethod
-    async def get_habit(session: T_Session, habit_id: uuid.UUID):
+    async def get_habit(session: T_Session, habit_id: uuid.UUID, user_id: str):
         db_habit = await session.scalar(
-            Select(Habit).where(Habit.id == habit_id)
+            Select(Habit).where(Habit.id == habit_id, Habit.user_id == user_id)
         )
 
         if not db_habit:
-            logger.warning(f'Habit {habit_id} não encontrado')
+            logger.warning(f'Habit {habit_id} não encontrado para usuário {user_id}')
             raise HTTPException(
                 status_code=HTTPStatus.NOT_FOUND, detail='habit not found'
             )
 
-        logger.info(f'Consultou o habit {habit_id}')
+        logger.info(f'Consultou o habit {habit_id} do usuário {user_id}')
 
         return db_habit
 
     @staticmethod
-    async def delete_habit(session: T_Session, habit_id: uuid.UUID):
-        logger.info(f'Deletando habit {habit_id}')
+    async def delete_habit(session: T_Session, habit_id: uuid.UUID, user_id: str):
+        logger.info(f'Deletando habit {habit_id} do usuário {user_id}')
         db_habit = await session.scalar(
-            Select(Habit).where(Habit.id == habit_id)
+            Select(Habit).where(Habit.id == habit_id, Habit.user_id == user_id)
         )
 
         if not db_habit:
-            logger.warning(f'Habit {habit_id} não encontrada')
+            logger.warning(f'Habit {habit_id} não encontrado para usuário {user_id}')
             raise HTTPException(
                 status_code=HTTPStatus.NOT_FOUND, detail='habit not found'
             )
@@ -65,19 +67,19 @@ class CRUDHabit:
 
     @staticmethod
     async def patch_habit(
-        session: T_Session, habit_id: uuid.UUID, habit: HabitSoftUpdate
+        session: T_Session, habit_id: uuid.UUID, habit: HabitSoftUpdate, user_id: str
     ):
         db_habit = await session.scalar(
-            Select(Habit).where(Habit.id == habit_id)
+            Select(Habit).where(Habit.id == habit_id, Habit.user_id == user_id)
         )
 
         if not db_habit:
-            logger.warning(f'Habit {habit_id} não encontrada')
+            logger.warning(f'Habit {habit_id} não encontrado para usuário {user_id}')
             raise HTTPException(
                 status_code=HTTPStatus.NOT_FOUND, detail='habit not found'
             )
 
-        logger.info(f'Atualizando habit {habit_id} para {habit.model_dump()}')
+        logger.info(f'Atualizando habit {habit_id} para {habit.model_dump()} do usuário {user_id}')
 
         for key, value in habit.model_dump(exclude_unset=True).items():
             setattr(db_habit, key, value)

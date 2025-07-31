@@ -3,6 +3,8 @@ from http import HTTPStatus
 
 from fastapi import APIRouter
 
+from timebeing_backend.auth_middleware import CurrentUserId
+
 from ..cruds.habit import CRUDHabit
 from ..database import T_Session
 from ..schemas.habit import (
@@ -17,8 +19,8 @@ router = APIRouter(prefix='/habits', tags=['habits'])
 
 
 @router.get('/', status_code=HTTPStatus.OK, response_model=HabitList)
-async def list_habits(session: T_Session):
-    all_habits = await CRUDHabit.list_habits(session=session)
+async def list_habits(session: T_Session, user_id: CurrentUserId):
+    all_habits = await CRUDHabit.list_habits(session=session, user_id=user_id)
 
     return {'habits': all_habits}
 
@@ -26,8 +28,8 @@ async def list_habits(session: T_Session):
 @router.get(
     '/{habit_id}', status_code=HTTPStatus.OK, response_model=HabitPublic
 )
-async def get_habit_by_id(session: T_Session, habit_id: uuid.UUID):
-    db_habit = await CRUDHabit.get_habit(session=session, habit_id=habit_id)
+async def get_habit_by_id(session: T_Session, habit_id: uuid.UUID, user_id: CurrentUserId):
+    db_habit = await CRUDHabit.get_habit(session=session, habit_id=habit_id, user_id=user_id)
 
     return db_habit
 
@@ -35,15 +37,15 @@ async def get_habit_by_id(session: T_Session, habit_id: uuid.UUID):
 @router.delete(
     '/{habit_id}', status_code=HTTPStatus.OK, response_model=Message
 )
-async def delete_habit(session: T_Session, habit_id: uuid.UUID):
-    await CRUDHabit.delete_habit(session=session, habit_id=habit_id)
+async def delete_habit(session: T_Session, habit_id: uuid.UUID, user_id: CurrentUserId):
+    await CRUDHabit.delete_habit(session=session, habit_id=habit_id, user_id=user_id)
 
     return {'message': 'Habit has been deleted successfully'}
 
 
 @router.post('/', status_code=HTTPStatus.CREATED, response_model=HabitPublic)
-async def create_habit(session: T_Session, habit: HabitCreate):
-    db_habit = await CRUDHabit.create_habit(session=session, habit=habit)
+async def create_habit(session: T_Session, habit: HabitCreate, user_id: CurrentUserId):
+    db_habit = await CRUDHabit.create_habit(session=session, habit=habit, user_id=user_id)
 
     return db_habit
 
@@ -52,10 +54,10 @@ async def create_habit(session: T_Session, habit: HabitCreate):
     '/{habit_id}', status_code=HTTPStatus.OK, response_model=HabitPublic
 )
 async def update_habit(
-    session: T_Session, habit: HabitSoftUpdate, habit_id: uuid.UUID
+    session: T_Session, habit: HabitSoftUpdate, habit_id: uuid.UUID, user_id: CurrentUserId
 ):
     db_habit = await CRUDHabit.patch_habit(
-        session=session, habit=habit, habit_id=habit_id
+        session=session, habit=habit, habit_id=habit_id, user_id=user_id
     )
 
     return db_habit

@@ -5,10 +5,7 @@ from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from timebeing_backend.routers import habit, project, task
-
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
-logger.addHandler(logging.StreamHandler())
+from .logger import logger  # Import configured logger
 
 
 @asynccontextmanager
@@ -27,6 +24,12 @@ app.add_middleware(
         'http://localhost:3000',
         'http://127.0.0.1:3000',
         'http://localhost:8080',
+        'http://localhost:5173',
+        'http://localhost:5174',
+        'https://internal-piglet-88.clerk.accounts.dev',
+        'https://clerk.shared.lcl.dev',
+        'https://*.clerk.accounts.dev',
+        'https://*.clerk.com'
     ],
     allow_credentials=True,
     allow_methods=['*'],
