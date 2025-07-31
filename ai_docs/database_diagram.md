@@ -11,6 +11,7 @@ erDiagram
         string title "Required"
         string description "Optional"
         ProjectStatus status "Enum: Criado, Andamento, Concluído"
+        ProjectPriorityState priority "Enum: Baixa, Média, Alta"
         string ai_context_text "Optional, AI integration field"
         datetime created_at "Auto-generated timestamp"
         datetime updated_at "Auto-updated timestamp"
@@ -21,13 +22,16 @@ erDiagram
         string title "Required"
         string description "Optional"
         datetime due_date "Optional"
-        TaskStatus status "Enum: Aberta, Andamento, Concluída"
+        boolean status "Boolean: false = não concluída, true = concluída"
         TaskPriorityState priority "Enum: Baixa, Média, Alta"
         integer duration_estimate_blocks "Optional, time estimation"
         string location_text "Optional, location description"
         decimal location_lat "Optional, latitude (10,7 precision)"
         decimal location_lon "Optional, longitude (10,7 precision)"
         string ai_context_text "Optional, AI integration field"
+        datetime scheduled_start_time "Optional, scheduled start time"
+        datetime scheduled_end_time "Optional, scheduled end time"
+        boolean is_focus "Boolean: false = normal, true = focus task"
         uuid parent_task_id FK "Optional, self-referencing"
         uuid project_id FK "Optional, references PROJECT"
         datetime created_at "Auto-generated timestamp"
@@ -71,7 +75,7 @@ erDiagram
 
 ### Enums
 - **ProjectStatus**: "Criado", "Andamento", "Concluído"
-- **TaskStatus**: "Aberta", "Andamento", "Concluída"
+- **ProjectPriorityState**: "Baixa", "Média", "Alta"
 - **TaskPriorityState**: "Baixa", "Média", "Alta"
 
 ### Timestamps (TimestampMixin)

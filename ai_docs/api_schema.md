@@ -30,7 +30,9 @@ List all tasks.
       "project_id": "uuid | null", 
       "description": "string | null",
       "due_date": "datetime | null",
-      "status": "Aberta | Andamento | Concluída",
+      "scheduled_start_time": "datetime | null",
+      "scheduled_end_time": "datetime | null",
+      "status": "boolean (false = não concluída, true = concluída)",
       "priority": "Baixa | Média | Alta",
       "duration_estimate_blocks": "integer | null",
       "location_text": "string | null",
@@ -57,7 +59,7 @@ Get a specific task by ID.
   "project_id": "uuid | null",
   "description": "string | null", 
   "due_date": "datetime | null",
-  "status": "Aberta | Andamento | Concluída",
+  "status": "boolean (false = não concluída, true = concluída)",
   "priority": "Baixa | Média | Alta",
   "duration_estimate_blocks": "integer | null",
   "location_text": "string | null",
@@ -91,7 +93,7 @@ List all subtasks of a specific task.
       "project_id": "uuid | null",
       "description": "string | null",
       "due_date": "datetime | null", 
-      "status": "Aberta | Andamento | Concluída",
+      "status": "boolean (false = não concluída, true = concluída)",
       "priority": "Baixa | Média | Alta",
       "duration_estimate_blocks": "integer | null",
       "location_text": "string | null",
@@ -119,7 +121,9 @@ Create a new task.
   "title": "string",
   "description": "string | null",
   "due_date": "datetime | null",
-  "status": "Aberta | Andamento | Concluída", // default: "Aberta"
+  "scheduled_start_time": "datetime | null",
+  "scheduled_end_time": "datetime | null",
+  "status": "boolean", // default: false (não concluída)
   "priority": "Baixa | Média | Alta", // default: "Baixa"
   "duration_estimate_blocks": "integer | null",
   "location_text": "string | null",
@@ -141,7 +145,9 @@ Create a new task.
   "project_id": "uuid | null",
   "description": "string | null",
   "due_date": "datetime | null",
-  "status": "Aberta | Andamento | Concluída",
+  "scheduled_start_time": "datetime | null",
+  "scheduled_end_time": "datetime | null",
+  "status": "boolean (false = não concluída, true = concluída)",
   "priority": "Baixa | Média | Alta",
   "duration_estimate_blocks": "integer | null",
   "location_text": "string | null",
@@ -165,7 +171,9 @@ Partially update a task.
   "project_id": "uuid | null",
   "description": "string | null",
   "due_date": "datetime | null",
-  "status": "Aberta | Andamento | Concluída",
+  "scheduled_start_time": "datetime | null",
+  "scheduled_end_time": "datetime | null",
+  "status": "boolean (false = não concluída, true = concluída)",
   "priority": "Baixa | Média | Alta",
   "duration_estimate_blocks": "integer | null",
   "location_text": "string | null",
@@ -185,7 +193,9 @@ Partially update a task.
   "project_id": "uuid | null",
   "description": "string | null",
   "due_date": "datetime | null",
-  "status": "Aberta | Andamento | Concluída",
+  "scheduled_start_time": "datetime | null",
+  "scheduled_end_time": "datetime | null",
+  "status": "boolean (false = não concluída, true = concluída)",
   "priority": "Baixa | Média | Alta",
   "duration_estimate_blocks": "integer | null",
   "location_text": "string | null",
@@ -226,6 +236,32 @@ Delete a task.
 
 ### Endpoints
 
+#### `GET /api/v1/projects/status-options`
+Get available project status options with labels and descriptions.
+
+**Response**: `200 OK`
+```json
+{
+  "status_options": [
+    {
+      "value": "Criado",
+      "label": "Planejamento",
+      "description": "Projeto em fase de planejamento"
+    },
+    {
+      "value": "Andamento",
+      "label": "Em Andamento",
+      "description": "Projeto ativo em desenvolvimento"
+    },
+    {
+      "value": "Concluído",
+      "label": "Concluído",
+      "description": "Projeto finalizado com sucesso"
+    }
+  ]
+}
+```
+
 #### `GET /api/v1/projects`
 List all projects.
 
@@ -237,7 +273,9 @@ List all projects.
       "id": "uuid",
       "title": "string",
       "description": "string | null",
-      "status": "Criado | Andamento | Concluído"
+      "status": "Criado | Andamento | Concluído",
+      "priority": "Baixa | Média | Alta",
+      "ai_context_text": "string | null"
     }
   ]
 }
@@ -255,7 +293,9 @@ Get a specific project by ID.
   "id": "uuid",
   "title": "string",
   "description": "string | null",
-  "status": "Criado | Andamento | Concluído"
+  "status": "Criado | Andamento | Concluído",
+  "priority": "Baixa | Média | Alta",
+  "ai_context_text": "string | null"
 }
 ```
 
@@ -283,7 +323,9 @@ List all tasks belonging to a specific project.
       "project_id": "uuid",
       "description": "string | null",
       "due_date": "datetime | null",
-      "status": "Aberta | Andamento | Concluída",
+      "scheduled_start_time": "datetime | null",
+      "scheduled_end_time": "datetime | null",
+      "status": "boolean (false = não concluída, true = concluída)",
       "priority": "Baixa | Média | Alta",
       "duration_estimate_blocks": "integer | null",
       "location_text": "string | null",
@@ -311,6 +353,7 @@ Create a new project.
   "title": "string",
   "description": "string | null",
   "status": "Criado | Andamento | Concluído", // default: "Criado"
+  "priority": "Baixa | Média | Alta", // default: "Baixa"
   "ai_context_text": "string | null"
 }
 ```
@@ -321,7 +364,9 @@ Create a new project.
   "id": "uuid",
   "title": "string",
   "description": "string | null",
-  "status": "Criado | Andamento | Concluído"
+  "status": "Criado | Andamento | Concluído",
+  "priority": "Baixa | Média | Alta",
+  "ai_context_text": "string | null"
 }
 ```
 
@@ -336,7 +381,9 @@ Partially update a project.
 {
   "title": "string",
   "description": "string | null",
-  "status": "Criado | Andamento | Concluído"
+  "status": "Criado | Andamento | Concluído",
+  "priority": "Baixa | Média | Alta",
+  "ai_context_text": "string | null"
 }
 ```
 
@@ -346,7 +393,9 @@ Partially update a project.
   "id": "uuid",
   "title": "string",
   "description": "string | null",
-  "status": "Criado | Andamento | Concluído"
+  "status": "Criado | Andamento | Concluído",
+  "priority": "Baixa | Média | Alta",
+  "ai_context_text": "string | null"
 }
 ```
 

@@ -22,7 +22,7 @@ alembic downgrade -1
 
 ### Docker Development
 ```bash
-# Start all services (app + PostgreSQL)
+# Start all services (app + PostgreSQL + PgAdmin + OpenTelemetry)
 docker-compose up
 
 # Start in background
@@ -37,6 +37,11 @@ docker-compose up --build
 # View logs
 docker-compose logs app
 docker-compose logs db
+
+# Access services:
+# - API: http://localhost:8000
+# - PgAdmin: http://localhost:5050 (admin@timebeing.com / admin)
+# - OpenTelemetry (Grafana): http://localhost:3001
 ```
 
 ## Architecture Overview
@@ -46,18 +51,25 @@ This is a **FastAPI backend** for a task/project management and habit tracking a
 ### Technology Stack
 - FastAPI with async/await patterns
 - SQLAlchemy 2.0 async ORM
-- PostgreSQL (via asyncpg + psycopg)
+- PostgreSQL (via psycopg)
 - Alembic for migrations
 - Poetry for dependency management
+- UV for package resolution
 - Ruff for linting/formatting
+- OpenTelemetry for observability
 
 ### Project Structure
 ```
 timebeing_backend/
-├── main.py                 # FastAPI app entry point
+├── main.py                 # FastAPI app entry point with CORS & lifespan
 ├── settings.py             # Pydantic settings (DATABASE_URL from .env)
 ├── database.py             # Async SQLAlchemy session management
+├── logger.py               # Logging configuration
 ├── models/                 # Domain entities
+│   ├── commom_mixins.py    # Shared model mixins (TimestampMixin)
+│   ├── task.py             # Task model with self-referencing subtasks
+│   ├── project.py          # Project model with cascading tasks
+│   └── habit.py            # Habit tracking model
 ├── schemas/                # Pydantic DTOs for API serialization
 ├── cruds/                  # Data access layer (repository pattern)
 └── routers/                # API controllers
@@ -66,21 +78,26 @@ timebeing_backend/
 ### Core Models & Relationships
 
 **Task Model** (`models/task.py`):
-- Self-referencing for subtasks (parent_task_id)
-- Belongs to Project (project_id) 
-- Status: Aberta, Andamento, Concluída
-- Priority: Baixa, Média, Alta
-- Location support (text + lat/lon coordinates)
-- Duration estimation in "blocks"
+- Self-referencing for subtasks (parent_task_id → pai/subtasks relationship)
+- Belongs to Project (project_id, nullable)
+- Status: Boolean (completed/not completed)
+- Priority: Baixa, Média, Alta (TaskPriorityState enum)
+- Location support (text + lat/lon coordinates with Decimal precision)
+- Duration estimation in "blocks" (integer)
 - Focus flag (is_focus) for marking priority tasks
+- Scheduling fields: due_date, scheduled_start_time, scheduled_end_time
+- AI context field for additional metadata
 
 **Project Model** (`models/project.py`):
-- One-to-many with Tasks (cascade delete)
-- Status: Criado, Andamento, Concluído
+- One-to-many with Tasks (cascade delete, selectin loading)
+- Status: Criado, Andamento, Concluído (ProjectStatus enum)
+- Priority: Baixa, Média, Alta (ProjectPriorityState enum)
+- AI context field for additional metadata
 
 **Habit Model** (`models/habit.py`):
 - Independent entity for habit tracking
-- Simple scoring system
+- Simple scoring system (current_score integer)
+- AI context prompt field for personalization
 
 All models use UUID primary keys, TimestampMixin for created_at/updated_at, and have ai_context fields.
 
@@ -101,7 +118,9 @@ All use async database sessions via FastAPI dependency injection. PATCH endpoint
 2. **Async Repository Pattern**: CRUD classes handle data access
 3. **Dependency Injection**: Database sessions injected via FastAPI Depends
 4. **Soft Updates**: Partial updates using Pydantic exclude_unset
-5. **Modern SQLAlchemy**: 2.0 async patterns throughout
+5. **Modern SQLAlchemy**: 2.0 async patterns with mapped_as_dataclass
+6. **Observability**: OpenTelemetry integration for monitoring
+7. **CORS Support**: Configured for frontend development (ports 3000, 8080)
 
 ### Coding Conventions
 
@@ -141,9 +160,22 @@ All use async database sessions via FastAPI dependency injection. PATCH endpoint
 
 Settings loaded from `.env` file via Pydantic. Currently requires only `DATABASE_URL` for PostgreSQL connection.
 
+Docker services include:
+- **PostgreSQL 15**: Main database (port 5432)
+- **PgAdmin**: Database administration (port 5050)
+- **OpenTelemetry**: Observability stack with Grafana LGTM (ports 3001, 4317)
+
 ### Missing Components
 
 No authentication system or testing suite currently implemented.
+
+### Development Notes
+
+- Uses Python 3.13+ requirement
+- Package management: Poetry + UV for resolution
+- Database migrations handled by Alembic with auto-migration support
+- CORS configured for common frontend dev ports
+- OpenTelemetry auto-instrumentation enabled for FastAPI, PostgreSQL, and logging
 
 ## Project Documentation
 
