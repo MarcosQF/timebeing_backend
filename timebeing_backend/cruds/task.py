@@ -15,7 +15,10 @@ from ..scheduler.jobs import schedule_notification
 class CRUDTask:
     @staticmethod
     async def create_task(session: T_Session, task: TaskCreate, user_id: str):
-        logger.info(f'Criando task {task.model_dump()} para usuário {user_id}')
+        logger.info(
+            'Criando task %s para usuário %s',
+            task.model_dump(), user_id
+        )
         task_data = task.model_dump()
         task_data['user_id'] = user_id
         db_task = Task(**task_data)
@@ -35,36 +38,48 @@ class CRUDTask:
 
     @staticmethod
     async def list_tasks(session: T_Session, user_id: str):
-        db_tasks = await session.scalars(Select(Task).where(Task.user_id == user_id))
+        db_tasks = await session.scalars(
+            Select(Task).where(Task.user_id == user_id)
+        )
 
-        logger.info(f'Listou as tasks do usuário {user_id}')
+        logger.info('Listou as tasks do usuário %s', user_id)
 
         return db_tasks
 
     @staticmethod
-    async def get_task_by_id(session: T_Session, task_id: uuid.UUID, user_id: str):
+    async def get_task_by_id(
+        session: T_Session, task_id: uuid.UUID, user_id: str
+    ):
         db_task = await session.scalar(
             Select(Task).where(Task.id == task_id, Task.user_id == user_id)
         )
 
         if not db_task:
-            logger.warning(f'Task {task_id} não encontrada para usuário {user_id}')
+            logger.warning(
+                'Task %s não encontrada para usuário %s',
+                task_id, user_id
+            )
             raise HTTPException(
                 status_code=HTTPStatus.NOT_FOUND, detail='Task not found'
             )
-        logger.info(f'Consultou o item {task_id} do usuário {user_id}')
+        logger.info('Consultou o item %s do usuário %s', task_id, user_id)
 
         return db_task
 
     @staticmethod
-    async def delete_task(session: T_Session, task_id: uuid.UUID, user_id: str):
-        logger.info(f'Deletando task {task_id} do usuário {user_id}')
+    async def delete_task(
+        session: T_Session, task_id: uuid.UUID, user_id: str
+    ):
+        logger.info('Deletando task %s do usuário %s', task_id, user_id)
         db_task = await session.scalar(
             Select(Task).where(Task.id == task_id, Task.user_id == user_id)
         )
 
         if not db_task:
-            logger.warning(f'Task {task_id} não encontrada para usuário {user_id}')
+            logger.warning(
+                'Task %s não encontrada para usuário %s',
+                task_id, user_id
+            )
             raise HTTPException(
                 status_code=HTTPStatus.NOT_FOUND, detail='Task not found'
             )
@@ -74,19 +89,28 @@ class CRUDTask:
 
     @staticmethod
     async def soft_update_task(
-        session: T_Session, task_id: uuid.UUID, task: TaskSoftUpdate, user_id: str
+        session: T_Session,
+        task_id: uuid.UUID,
+        task: TaskSoftUpdate,
+        user_id: str,
     ):
         db_task = await session.scalar(
             Select(Task).where(Task.id == task_id, Task.user_id == user_id)
         )
 
         if not db_task:
-            logger.warning(f'Task {task_id} não encontrada para usuário {user_id}')
+            logger.warning(
+                'Task %s não encontrada para usuário %s',
+                task_id, user_id
+            )
             raise HTTPException(
                 status_code=HTTPStatus.NOT_FOUND, detail='Task not found'
             )
 
-        logger.info(f'Atualizando task {task_id} para {task.model_dump()} do usuário {user_id}')
+        logger.info(
+            'Atualizando task %s para %s do usuário %s',
+            task_id, task.model_dump(), user_id
+        )
 
         for key, value in task.model_dump(exclude_unset=True).items():
             setattr(db_task, key, value)
@@ -98,22 +122,33 @@ class CRUDTask:
         return db_task
 
     @staticmethod
-    async def list_subtasks(session: T_Session, task_id: uuid.UUID, user_id: str):
+    async def list_subtasks(
+        session: T_Session, task_id: uuid.UUID, user_id: str
+    ):
         db_task = await session.scalar(
             Select(Task).where(Task.id == task_id, Task.user_id == user_id)
         )
 
         if not db_task:
-            logger.info(f'Subtasks da task {task_id} não foram encontradas para usuário {user_id}')
+            logger.info(
+                'Subtasks da task %s não foram encontradas '
+                'para usuário %s',
+                task_id, user_id
+            )
             raise HTTPException(
                 status_code=HTTPStatus.NOT_FOUND,
                 detail='Parent task not found',
             )
 
         db_subtasks = await session.scalars(
-            Select(Task).where(Task.parent_task_id == task_id, Task.user_id == user_id)
+            Select(Task).where(
+                Task.parent_task_id == task_id, Task.user_id == user_id
+            )
         )
 
-        logger.info(f'Consultando subtasks da task {task_id} do usuário {user_id}')
+        logger.info(
+            'Consultando subtasks da task %s do usuário %s',
+            task_id, user_id
+        )
 
         return db_subtasks

@@ -1,4 +1,3 @@
-import logging
 from contextlib import asynccontextmanager
 
 from fastapi import APIRouter, FastAPI
@@ -6,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from timebeing_backend.routers import habit, project, task
 from timebeing_backend.scheduler.manager import start_scheduler, stop_scheduler
+
 from .logger import logger  # Import configured logger
 
 

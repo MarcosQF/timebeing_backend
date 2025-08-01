@@ -30,6 +30,11 @@ def schedule_notification(
 
 
 async def send_notification_job(task_title: str, notify_at: timedelta):
-    await send_task_to_rabbitmq({
-        'message': f'Você tem {notify_at} para completar a task {task_title}',
-    })
+    await send_task_to_rabbitmq(
+        {
+            'message': (
+                f'Você tem {notify_at} para '
+                f'completar a task {task_title}'
+            ),
+        }
+    )

@@ -21,8 +21,12 @@ async def list_tasks(session: T_Session, user_id: CurrentUserId):
 
 
 @router.get('/{task_id}', status_code=HTTPStatus.OK, response_model=TaskPublic)
-async def get_task_by_id(session: T_Session, task_id: uuid.UUID, user_id: CurrentUserId):
-    db_task = await CRUDTask.get_task_by_id(session=session, task_id=task_id, user_id=user_id)
+async def get_task_by_id(
+    session: T_Session, task_id: uuid.UUID, user_id: CurrentUserId
+):
+    db_task = await CRUDTask.get_task_by_id(
+        session=session, task_id=task_id, user_id=user_id
+    )
 
     return db_task
 
@@ -30,7 +34,9 @@ async def get_task_by_id(session: T_Session, task_id: uuid.UUID, user_id: Curren
 @router.get(
     '/{task_id}/subtasks', status_code=HTTPStatus.OK, response_model=TaskList
 )
-async def list_subtasks(session: T_Session, task_id: uuid.UUID, user_id: CurrentUserId):
+async def list_subtasks(
+    session: T_Session, task_id: uuid.UUID, user_id: CurrentUserId
+):
     db_subtasks = await CRUDTask.list_subtasks(
         session=session, task_id=task_id, user_id=user_id
     )
@@ -39,15 +45,23 @@ async def list_subtasks(session: T_Session, task_id: uuid.UUID, user_id: Current
 
 
 @router.post('/', status_code=HTTPStatus.CREATED, response_model=TaskPublic)
-async def create_task(session: T_Session, task: TaskCreate, user_id: CurrentUserId):
-    db_task = await CRUDTask.create_task(session=session, task=task, user_id=user_id)
+async def create_task(
+    session: T_Session, task: TaskCreate, user_id: CurrentUserId
+):
+    db_task = await CRUDTask.create_task(
+        session=session, task=task, user_id=user_id
+    )
 
     return db_task
 
 
 @router.delete('/{task_id}', status_code=HTTPStatus.OK, response_model=Message)
-async def delete_task(session: T_Session, task_id: uuid.UUID, user_id: CurrentUserId):
-    await CRUDTask.delete_task(session=session, task_id=task_id, user_id=user_id)
+async def delete_task(
+    session: T_Session, task_id: uuid.UUID, user_id: CurrentUserId
+):
+    await CRUDTask.delete_task(
+        session=session, task_id=task_id, user_id=user_id
+    )
 
     return {'message': 'Task has been deleted succesfully'}
 
@@ -56,7 +70,10 @@ async def delete_task(session: T_Session, task_id: uuid.UUID, user_id: CurrentUs
     '/{task_id}', status_code=HTTPStatus.OK, response_model=TaskPublic
 )
 async def soft_update_task(
-    session: T_Session, task_id: uuid.UUID, task: TaskSoftUpdate, user_id: CurrentUserId
+    session: T_Session,
+    task_id: uuid.UUID,
+    task: TaskSoftUpdate,
+    user_id: CurrentUserId,
 ):
     db_task = await CRUDTask.soft_update_task(
         session=session, task_id=task_id, task=task, user_id=user_id

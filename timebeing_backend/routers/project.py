@@ -53,7 +53,9 @@ async def get_project_status_options():
 @router.get(
     '/{project_id}', status_code=HTTPStatus.OK, response_model=ProjectPublic
 )
-async def get_project_by_id(session: T_Session, project_id: uuid.UUID, user_id: CurrentUserId):
+async def get_project_by_id(
+    session: T_Session, project_id: uuid.UUID, user_id: CurrentUserId
+):
     db_project = await CRUDProject.get_project_by_id(
         session=session, project_id=project_id, user_id=user_id
     )
@@ -63,7 +65,9 @@ async def get_project_by_id(session: T_Session, project_id: uuid.UUID, user_id: 
 
 @router.get('/', status_code=HTTPStatus.OK, response_model=ProjectList)
 async def list_projects(session: T_Session, user_id: CurrentUserId):
-    db_projects = await CRUDProject.list_projects(session=session, user_id=user_id)
+    db_projects = await CRUDProject.list_projects(
+        session=session, user_id=user_id
+    )
 
     return {'projects': db_projects}
 
@@ -73,7 +77,9 @@ async def list_projects(session: T_Session, user_id: CurrentUserId):
     status_code=HTTPStatus.OK,
     response_model=ProjectTasks,
 )
-async def list_tasks(session: T_Session, project_id: uuid.UUID, user_id: CurrentUserId):
+async def list_tasks(
+    session: T_Session, project_id: uuid.UUID, user_id: CurrentUserId
+):
     db_tasks = await CRUDProject.list_tasks(
         session=session, project_id=project_id, user_id=user_id
     )
@@ -82,7 +88,9 @@ async def list_tasks(session: T_Session, project_id: uuid.UUID, user_id: Current
 
 
 @router.post('/', status_code=HTTPStatus.CREATED, response_model=ProjectPublic)
-async def create_project(session: T_Session, project: ProjectCreate, user_id: CurrentUserId):
+async def create_project(
+    session: T_Session, project: ProjectCreate, user_id: CurrentUserId
+):
     db_project = await CRUDProject.create_project(
         session=session, project=project, user_id=user_id
     )
@@ -93,8 +101,12 @@ async def create_project(session: T_Session, project: ProjectCreate, user_id: Cu
 @router.delete(
     '/{project_id}', status_code=HTTPStatus.OK, response_model=Message
 )
-async def delete_project(session: T_Session, project_id: uuid.UUID, user_id: CurrentUserId):
-    await CRUDProject.delete_project(session=session, project_id=project_id, user_id=user_id)
+async def delete_project(
+    session: T_Session, project_id: uuid.UUID, user_id: CurrentUserId
+):
+    await CRUDProject.delete_project(
+        session=session, project_id=project_id, user_id=user_id
+    )
 
     return {'message': 'Project has been deleted succesfully'}
 
@@ -103,10 +115,16 @@ async def delete_project(session: T_Session, project_id: uuid.UUID, user_id: Cur
     '/{project_id}', status_code=HTTPStatus.OK, response_model=ProjectPublic
 )
 async def soft_update_project(
-    session: T_Session, project_id: uuid.UUID, project: ProjectSoftUpdate, user_id: CurrentUserId
+    session: T_Session,
+    project_id: uuid.UUID,
+    project: ProjectSoftUpdate,
+    user_id: CurrentUserId,
 ):
     db_project = await CRUDProject.soft_update_project(
-        session=session, project_id=project_id, project=project, user_id=user_id
+        session=session,
+        project_id=project_id,
+        project=project,
+        user_id=user_id,
     )
 
     return db_project
