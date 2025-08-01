@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+from datetime import datetime, timedelta
 from decimal import Decimal
 
 from pydantic import BaseModel, Field
@@ -11,6 +11,7 @@ class TaskCreate(BaseModel):
     title: str
     description: str | None = None
     due_date: datetime | None = None
+    notify_at: timedelta | None = None
     scheduled_start_time: datetime | None = None
     scheduled_end_time: datetime | None = None
     status: bool = Field(default=False)
@@ -33,6 +34,7 @@ class TaskPublic(BaseModel):
     user_id: str
     description: str | None
     due_date: datetime | None
+    notify_at: timedelta | None
     scheduled_start_time: datetime | None
     scheduled_end_time: datetime | None
     status: bool
@@ -57,6 +59,7 @@ class TaskSoftUpdate(BaseModel):
     project_id: uuid.UUID | None = None
     description: str | None = None
     due_date: datetime | None = None
+    notify_at: timedelta | None = None
     scheduled_start_time: datetime | None = None
     scheduled_end_time: datetime | None = None
     status: bool | None = None

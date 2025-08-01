@@ -11,8 +11,10 @@ from .logger import logger  # Import configured logger
 @asynccontextmanager
 async def lifespan(app):
     logger.info('Iniciando Aplicação')
+    start_scheduler()
     yield
     logger.info('Encerrando Aplicação')
+    stop_scheduler()
 
 
 router = APIRouter(prefix='/api/v1')

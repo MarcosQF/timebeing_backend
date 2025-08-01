@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     DATABASE_URL: str
     CLERK_SECRET_KEY: str | None = None
     JWT_KEY: str | None = None
+    RABBITMQ_URL: str
 
 
 settings = Settings()

@@ -9,6 +9,7 @@ from timebeing_backend.models.task import Task
 from timebeing_backend.schemas.task import TaskCreate, TaskSoftUpdate
 
 from ..logger import logger
+from ..scheduler.jobs import schedule_notification
 
 
 class CRUDTask:
@@ -18,6 +19,13 @@ class CRUDTask:
         task_data = task.model_dump()
         task_data['user_id'] = user_id
         db_task = Task(**task_data)
+
+        if task.due_date and task.notify_at:
+            schedule_notification(
+                task_title=task.title,
+                due_date=task.due_date,
+                notify_at=task.notify_at,
+            )
 
         session.add(db_task)
         await session.commit()
