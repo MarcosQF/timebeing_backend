@@ -3,9 +3,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from ..settings import settings
 
-jobstores = {
-    'default': SQLAlchemyJobStore(url=settings.DATABASE_URL)
-}
+jobstores = {'default': SQLAlchemyJobStore(url=settings.DATABASE_URL)}
 scheduler = AsyncIOScheduler(jobstores=jobstores)
 
 
