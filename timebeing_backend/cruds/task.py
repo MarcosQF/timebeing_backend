@@ -27,6 +27,13 @@ class CRUDTask:
                 notify_at=task.notify_at,
             )
 
+        if task.due_date and task.notify_at:
+            schedule_notification(
+                task_title=task.title,
+                due_date=task.due_date,
+                notify_at=task.notify_at,
+            )
+
         session.add(db_task)
         await session.commit()
         await session.refresh(db_task)
