@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     )
 
     DATABASE_URL: str
+    RABBITMQ_URL: str
 
 
 settings = Settings()

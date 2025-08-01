@@ -6,6 +6,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from timebeing_backend.routers import habit, project, task
 
+from .scheduler.manager import start_scheduler, stop_scheduler
+
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 logger.addHandler(logging.StreamHandler())
@@ -14,8 +16,10 @@ logger.addHandler(logging.StreamHandler())
 @asynccontextmanager
 async def lifespan(app):
     logger.info('Iniciando Aplicação')
+    start_scheduler()
     yield
     logger.info('Encerrando Aplicação')
+    stop_scheduler()
 
 
 router = APIRouter(prefix='/api/v1')
