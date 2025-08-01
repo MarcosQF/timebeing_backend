@@ -52,6 +52,7 @@ class Task(TimestampMixin):
     project_id: Mapped[uuid.UUID | None] = mapped_column(
         ForeignKey('project.id'), nullable=True
     )
+    user_id: Mapped[str] = mapped_column(nullable=False)
     is_focus: Mapped[bool] = mapped_column(
         Boolean, default=False, server_default='false', nullable=False
     )

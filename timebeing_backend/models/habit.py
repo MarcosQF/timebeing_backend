@@ -15,6 +15,7 @@ class Habit(TimestampMixin):
     description: Mapped[str] = mapped_column(nullable=True)
     current_score: Mapped[int] = mapped_column(nullable=True)
     ai_context_prompt: Mapped[str] = mapped_column(nullable=True)
+    user_id: Mapped[str] = mapped_column(nullable=False)
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, init=False
     )
