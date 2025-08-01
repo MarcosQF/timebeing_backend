@@ -25,6 +25,59 @@ if not jwt_key:
 clerk_sdk = Clerk(bearer_auth=clerk_secret)
 
 
+async def get_user_primary_email(user_id: str) -> str:
+    """
+    Get the primary email address for a user from Clerk.
+
+    Args:
+        user_id (str): The Clerk user ID
+
+    Returns:
+        str: The primary email address of the user
+
+    Raises:
+        HTTPException: If user not found or has no email addresses
+    """
+    try:
+        user = clerk_sdk.users.get(user_id=user_id)
+
+        if not user.email_addresses:
+            logger.error('User %s has no email addresses', user_id)
+            raise HTTPException(
+                status_code=404, detail='User has no email addresses'
+            )
+
+        # Get primary email using primary_email_address_id
+        primary_email_address_id = user.primary_email_address_id
+        primary_email = next(
+            (
+                email
+                for email in user.email_addresses
+                if email.id == primary_email_address_id
+            ),
+            None,
+        )
+
+        if primary_email:
+            return primary_email.email_address
+
+        # If no primary email found, return the first one
+        return user.email_addresses[0].email_address
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(
+            'Error fetching user email for %s: %s',
+            user_id,
+            str(e),
+            exc_info=True,
+        )
+        raise HTTPException(
+            status_code=500, detail=f'Error fetching user email: {str(e)}'
+        ) from e
+
+
 async def get_current_user_id(request: Request) -> str:
     """
     Dependency to extract and validate user ID from Clerk JWT token.
@@ -42,7 +95,8 @@ async def get_current_user_id(request: Request) -> str:
 
         logger.info(
             'Auth attempt - Origin: %s, Has Auth Header: %s',
-            origin, bool(auth_header)
+            origin,
+            bool(auth_header),
         )
 
         if not auth_header:
@@ -94,7 +148,7 @@ async def get_current_user_id(request: Request) -> str:
         logger.error('Authentication error: %s', str(e), exc_info=True)
         raise HTTPException(
             status_code=500, detail=f'Authentication error: {str(e)}'
-        )
+        ) from e
 
 
 # Type alias for dependency injection
