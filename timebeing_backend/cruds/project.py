@@ -12,6 +12,7 @@ from timebeing_backend.schemas.project import (
     ProjectSoftUpdate,
 )
 
+from ..auth_middleware import get_user_primary_email
 from ..logger import logger
 
 
@@ -20,9 +21,11 @@ class CRUDProject:
     async def create_project(
         session: T_Session, project: ProjectCreate, user_id: str
     ):
+        user_email = await get_user_primary_email(user_id=user_id)
         logger.info(
             'Criando project %s para usuário %s',
-            project.model_dump(), user_id
+            project.model_dump(),
+            user_email,
         )
         project_data = project.model_dump()
         project_data['user_id'] = user_id
@@ -38,6 +41,7 @@ class CRUDProject:
     async def get_project_by_id(
         session: T_Session, project_id: uuid.UUID, user_id: str
     ):
+        user_email = await get_user_primary_email(user_id=user_id)
         db_project = await session.scalar(
             Select(Project).where(
                 Project.id == project_id, Project.user_id == user_id
@@ -47,7 +51,8 @@ class CRUDProject:
         if not db_project:
             logger.warning(
                 'Project %s não encontrado para usuário %s',
-                project_id, user_id
+                project_id,
+                user_email,
             )
             raise HTTPException(
                 status_code=HTTPStatus.NOT_FOUND, detail='Project not found'
@@ -57,9 +62,11 @@ class CRUDProject:
 
     @staticmethod
     async def list_projects(session: T_Session, user_id: str):
+        user_email = await get_user_primary_email(user_id=user_id)
         db_projects = await session.scalars(
             Select(Project).where(Project.user_id == user_id)
         )
+        logger.info('Listou projects do usuário %s', user_email)
 
         return db_projects
 
@@ -67,7 +74,10 @@ class CRUDProject:
     async def delete_project(
         session: T_Session, project_id: uuid.UUID, user_id: str
     ):
-        logger.info('Deletando project %s do usuário %s', project_id, user_id)
+        user_email = await get_user_primary_email(user_id=user_id)
+        logger.info(
+            'Deletando project %s do usuário %s', project_id, user_email
+        )
         db_project = await session.scalar(
             Select(Project).where(
                 Project.id == project_id, Project.user_id == user_id
@@ -77,7 +87,8 @@ class CRUDProject:
         if not db_project:
             logger.warning(
                 'Project %s não encontrado para usuário %s',
-                project_id, user_id
+                project_id,
+                user_email,
             )
             raise HTTPException(
                 status_code=HTTPStatus.NOT_FOUND, detail='Project not found'
@@ -93,6 +104,7 @@ class CRUDProject:
         project: ProjectSoftUpdate,
         user_id: str,
     ):
+        user_email = await get_user_primary_email(user_id=user_id)
         db_project = await session.scalar(
             Select(Project).where(
                 Project.id == project_id, Project.user_id == user_id
@@ -102,7 +114,8 @@ class CRUDProject:
         if not db_project:
             logger.warning(
                 'Project %s não encontrado para usuário %s',
-                project_id, user_id
+                project_id,
+                user_email,
             )
             raise HTTPException(
                 status_code=HTTPStatus.NOT_FOUND, detail='Project not found'
@@ -110,7 +123,9 @@ class CRUDProject:
 
         logger.info(
             'Atualizando project %s para %s do usuário %s',
-            project_id, project.model_dump(), user_id
+            project_id,
+            project.model_dump(),
+            user_email,
         )
 
         for key, value in project.model_dump(exclude_unset=True).items():
@@ -126,6 +141,7 @@ class CRUDProject:
     async def list_tasks(
         session: T_Session, project_id: uuid.UUID, user_id: str
     ):
+        user_email = await get_user_primary_email(user_id=user_id)
         db_project = await session.scalar(
             Select(Project).where(
                 Project.id == project_id, Project.user_id == user_id
@@ -135,7 +151,8 @@ class CRUDProject:
         if not db_project:
             logger.warning(
                 'Project %s não encontrado para usuário %s',
-                project_id, user_id
+                project_id,
+                user_email,
             )
             raise HTTPException(
                 status_code=HTTPStatus.NOT_FOUND, detail='Project not found'
@@ -148,7 +165,8 @@ class CRUDProject:
         )
         logger.info(
             'Consultando tasks do projeto %s do usuário %s',
-            project_id, user_id
+            project_id,
+            user_email,
         )
 
         return db_tasks
