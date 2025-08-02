@@ -26,7 +26,7 @@ class TaskCreate(BaseModel):
     parent_task_id: uuid.UUID | None = None
     project_id: uuid.UUID | None = None
 
-    @field_validator("due_date", mode="before")
+    @field_validator('due_date', mode='before')
     def ensure_brazil_timezone(cls, v):
         if v is None:
             return v
@@ -35,9 +35,9 @@ class TaskCreate(BaseModel):
             v = datetime.fromisoformat(v)
 
         if v.tzinfo:
-            return v.astimezone(ZoneInfo("America/Sao_Paulo"))
+            return v.astimezone(ZoneInfo('America/Sao_Paulo'))
 
-        return v.replace(tzinfo=ZoneInfo("America/Sao_Paulo"))
+        return v.replace(tzinfo=ZoneInfo('America/Sao_Paulo'))
 
 
 class TaskPublic(BaseModel):

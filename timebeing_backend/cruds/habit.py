@@ -19,8 +19,7 @@ class CRUDHabit:
     ):
         user_email = await get_user_primary_email(user_id=user_id)
         logger.info(
-            'Criando habit %s para usuário %s',
-            habit.model_dump(), user_email
+            'Criando habit %s para usuário %s', habit.model_dump(), user_email
         )
         habit_data = habit.model_dump()
         habit_data['user_id'] = user_id
@@ -52,8 +51,7 @@ class CRUDHabit:
 
         if not db_habit:
             logger.warning(
-                'Habit %s não encontrado para usuário %s',
-                habit_id, user_email
+                'Habit %s não encontrado para usuário %s', habit_id, user_email
             )
             raise HTTPException(
                 status_code=HTTPStatus.NOT_FOUND, detail='habit not found'
@@ -75,8 +73,7 @@ class CRUDHabit:
 
         if not db_habit:
             logger.warning(
-                'Habit %s não encontrado para usuário %s',
-                habit_id, user_email
+                'Habit %s não encontrado para usuário %s', habit_id, user_email
             )
             raise HTTPException(
                 status_code=HTTPStatus.NOT_FOUND, detail='habit not found'
@@ -99,8 +96,7 @@ class CRUDHabit:
 
         if not db_habit:
             logger.warning(
-                'Habit %s não encontrado para usuário %s',
-                habit_id, user_email
+                'Habit %s não encontrado para usuário %s', habit_id, user_email
             )
             raise HTTPException(
                 status_code=HTTPStatus.NOT_FOUND, detail='habit not found'
@@ -108,7 +104,9 @@ class CRUDHabit:
 
         logger.info(
             'Atualizando habit %s para %s do usuário %s',
-            habit_id, habit.model_dump(), user_email
+            habit_id,
+            habit.model_dump(),
+            user_email,
         )
 
         for key, value in habit.model_dump(exclude_unset=True).items():
