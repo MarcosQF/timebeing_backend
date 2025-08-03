@@ -17,7 +17,7 @@ class CRUDHabit:
     async def create_habit(
         session: T_Session, habit: HabitCreate, user_id: str
     ):
-        user_email = await get_user_primary_email(user_id=user_id)
+        # user_email = await get_user_primary_email(user_id=user_id)
         logger.info(
             'Criando habit %s para usuário %s', habit.model_dump(), user_email
         )
@@ -33,18 +33,18 @@ class CRUDHabit:
 
     @staticmethod
     async def list_habits(session: T_Session, user_id: str):
-        user_email = await get_user_primary_email(user_id=user_id)
+        # user_email = await get_user_primary_email(user_id=user_id)
         db_habits = await session.scalars(
             Select(Habit).where(Habit.user_id == user_id)
         )
 
-        logger.info('Listou os habits do usuário %s', user_email)
+        # logger.info('Listou os habits do usuário %s', user_email)
 
         return db_habits
 
     @staticmethod
     async def get_habit(session: T_Session, habit_id: uuid.UUID, user_id: str):
-        user_email = await get_user_primary_email(user_id=user_id)
+        # user_email = await get_user_primary_email(user_id=user_id)
         db_habit = await session.scalar(
             Select(Habit).where(Habit.id == habit_id, Habit.user_id == user_id)
         )
@@ -57,7 +57,7 @@ class CRUDHabit:
                 status_code=HTTPStatus.NOT_FOUND, detail='habit not found'
             )
 
-        logger.info('Consultou o habit %s do usuário %s', habit_id, user_email)
+        # logger.info('Consultou o habit %s do usuário %s', habit_id, user_email)
 
         return db_habit
 
@@ -65,7 +65,7 @@ class CRUDHabit:
     async def delete_habit(
         session: T_Session, habit_id: uuid.UUID, user_id: str
     ):
-        user_email = await get_user_primary_email(user_id=user_id)
+        # user_email = await get_user_primary_email(user_id=user_id)
         logger.info('Deletando habit %s do usuário %s', habit_id, user_id)
         db_habit = await session.scalar(
             Select(Habit).where(Habit.id == habit_id, Habit.user_id == user_id)
@@ -89,7 +89,7 @@ class CRUDHabit:
         habit: HabitSoftUpdate,
         user_id: str,
     ):
-        user_email = await get_user_primary_email(user_id=user_id)
+        # user_email = await get_user_primary_email(user_id=user_id)
         db_habit = await session.scalar(
             Select(Habit).where(Habit.id == habit_id, Habit.user_id == user_id)
         )

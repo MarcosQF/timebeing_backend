@@ -16,7 +16,7 @@ from ..scheduler.jobs import schedule_notification
 class CRUDTask:
     @staticmethod
     async def create_task(session: T_Session, task: TaskCreate, user_id: str):
-        user_email = await get_user_primary_email(user_id=user_id)
+        # user_email = await get_user_primary_email(user_id=user_id)
         logger.info(
             'Criando task %s para usuário %s', task.model_dump(), user_email
         )
@@ -40,12 +40,12 @@ class CRUDTask:
 
     @staticmethod
     async def list_tasks(session: T_Session, user_id: str):
-        user_email = await get_user_primary_email(user_id=user_id)
+        # user_email = await get_user_primary_email(user_id=user_id)
         db_tasks = await session.scalars(
             Select(Task).where(Task.user_id == user_id)
         )
 
-        logger.info('Listou as tasks do usuário %s', user_email)
+        # logger.info('Listou as tasks do usuário %s', user_email)
 
         return db_tasks
 
@@ -53,7 +53,7 @@ class CRUDTask:
     async def get_task_by_id(
         session: T_Session, task_id: uuid.UUID, user_id: str
     ):
-        user_email = await get_user_primary_email(user_id=user_id)
+        # user_email = await get_user_primary_email(user_id=user_id)
         db_task = await session.scalar(
             Select(Task).where(Task.id == task_id, Task.user_id == user_id)
         )
@@ -73,7 +73,7 @@ class CRUDTask:
     async def delete_task(
         session: T_Session, task_id: uuid.UUID, user_id: str
     ):
-        user_email = await get_user_primary_email(user_id=user_id)
+        # user_email = await get_user_primary_email(user_id=user_id)
         logger.info('Deletando task %s do usuário %s', task_id, user_id)
         db_task = await session.scalar(
             Select(Task).where(Task.id == task_id, Task.user_id == user_id)
@@ -97,7 +97,7 @@ class CRUDTask:
         task: TaskSoftUpdate,
         user_id: str,
     ):
-        user_email = await get_user_primary_email(user_id=user_id)
+        # user_email = await get_user_primary_email(user_id=user_id)
         db_task = await session.scalar(
             Select(Task).where(Task.id == task_id, Task.user_id == user_id)
         )
@@ -130,7 +130,7 @@ class CRUDTask:
     async def list_subtasks(
         session: T_Session, task_id: uuid.UUID, user_id: str
     ):
-        user_email = await get_user_primary_email(user_id=user_id)
+        # user_email = await get_user_primary_email(user_id=user_id)
         db_task = await session.scalar(
             Select(Task).where(Task.id == task_id, Task.user_id == user_id)
         )
