@@ -8,7 +8,6 @@ from timebeing_backend.database import T_Session
 from timebeing_backend.models.task import Task
 from timebeing_backend.schemas.task import TaskCreate, TaskSoftUpdate
 
-from ..auth_middleware import get_user_primary_email
 from ..logger import logger
 from ..scheduler.jobs import schedule_notification
 
@@ -16,9 +15,8 @@ from ..scheduler.jobs import schedule_notification
 class CRUDTask:
     @staticmethod
     async def create_task(session: T_Session, task: TaskCreate, user_id: str):
-        user_email = await get_user_primary_email(user_id=user_id)
         logger.info(
-            'Criando task %s para usuário %s', task.model_dump(), user_email
+            'Criando task %s para usuário %s', task.model_dump(), user_id
         )
         task_data = task.model_dump()
         task_data['user_id'] = user_id
@@ -40,12 +38,11 @@ class CRUDTask:
 
     @staticmethod
     async def list_tasks(session: T_Session, user_id: str):
-        user_email = await get_user_primary_email(user_id=user_id)
         db_tasks = await session.scalars(
             Select(Task).where(Task.user_id == user_id)
         )
 
-        logger.info('Listou as tasks do usuário %s', user_email)
+        logger.info('Listou as tasks do usuário %s', user_id)
 
         return db_tasks
 
@@ -53,14 +50,13 @@ class CRUDTask:
     async def get_task_by_id(
         session: T_Session, task_id: uuid.UUID, user_id: str
     ):
-        user_email = await get_user_primary_email(user_id=user_id)
         db_task = await session.scalar(
             Select(Task).where(Task.id == task_id, Task.user_id == user_id)
         )
 
         if not db_task:
             logger.warning(
-                'Task %s não encontrada para usuário %s', task_id, user_email
+                'Task %s não encontrada para usuário %s', task_id, user_id
             )
             raise HTTPException(
                 status_code=HTTPStatus.NOT_FOUND, detail='Task not found'
@@ -73,7 +69,6 @@ class CRUDTask:
     async def delete_task(
         session: T_Session, task_id: uuid.UUID, user_id: str
     ):
-        user_email = await get_user_primary_email(user_id=user_id)
         logger.info('Deletando task %s do usuário %s', task_id, user_id)
         db_task = await session.scalar(
             Select(Task).where(Task.id == task_id, Task.user_id == user_id)
@@ -81,7 +76,7 @@ class CRUDTask:
 
         if not db_task:
             logger.warning(
-                'Task %s não encontrada para usuário %s', task_id, user_email
+                'Task %s não encontrada para usuário %s', task_id, user_id
             )
             raise HTTPException(
                 status_code=HTTPStatus.NOT_FOUND, detail='Task not found'
@@ -97,14 +92,13 @@ class CRUDTask:
         task: TaskSoftUpdate,
         user_id: str,
     ):
-        user_email = await get_user_primary_email(user_id=user_id)
         db_task = await session.scalar(
             Select(Task).where(Task.id == task_id, Task.user_id == user_id)
         )
 
         if not db_task:
             logger.warning(
-                'Task %s não encontrada para usuário %s', task_id, user_email
+                'Task %s não encontrada para usuário %s', task_id, user_id
             )
             raise HTTPException(
                 status_code=HTTPStatus.NOT_FOUND, detail='Task not found'
@@ -114,7 +108,7 @@ class CRUDTask:
             'Atualizando task %s para %s do usuário %s',
             task_id,
             task.model_dump(),
-            user_email,
+            user_id,
         )
 
         for key, value in task.model_dump(exclude_unset=True).items():
@@ -130,7 +124,6 @@ class CRUDTask:
     async def list_subtasks(
         session: T_Session, task_id: uuid.UUID, user_id: str
     ):
-        user_email = await get_user_primary_email(user_id=user_id)
         db_task = await session.scalar(
             Select(Task).where(Task.id == task_id, Task.user_id == user_id)
         )
@@ -139,7 +132,7 @@ class CRUDTask:
             logger.info(
                 'Subtasks da task %s não foram encontradas para usuário %s',
                 task_id,
-                user_email,
+                user_id,
             )
             raise HTTPException(
                 status_code=HTTPStatus.NOT_FOUND,
@@ -155,7 +148,7 @@ class CRUDTask:
         logger.info(
             'Consultando subtasks da task %s do usuário %s',
             task_id,
-            user_email,
+            user_id,
         )
 
         return db_subtasks
