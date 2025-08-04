@@ -58,6 +58,40 @@ services:
       - "3001:3000"
       - "4317:4317"
 
+  notification-service:
+    image: marcosqf/notify-service
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql+psycopg://postgres:postgres@db-notification:5432/notifications
+    ports:
+      - 8001:8000
+    depends_on:
+      db-notification:
+        condition: service_healthy
+    command: >
+      sh -c "
+        poetry run alembic upgrade head &&
+        poetry run uvicorn --host 0.0.0.0 --port 8000 notify_service.main:app 
+      "
+      
+  db-notification:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: notifications
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_notify_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
 volumes:
   postgres_data:
+  postgres_notify_data:
   pgadmin_data:
