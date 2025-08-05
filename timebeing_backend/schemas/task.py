@@ -62,6 +62,19 @@ class TaskPublic(BaseModel):
     created_at: datetime
     updated_at: datetime
 
+    @field_validator('due_date', mode='before')
+    def ensure_brazil_timezone(cls, v):
+        if v is None:
+            return v
+
+        if isinstance(v, str):
+            v = datetime.fromisoformat(v)
+
+        if v.tzinfo:
+            return v.astimezone(ZoneInfo('America/Sao_Paulo'))
+
+        return v.replace(tzinfo=ZoneInfo('America/Sao_Paulo'))
+
 
 class TaskList(BaseModel):
     tasks: list[TaskPublic]
@@ -84,3 +97,16 @@ class TaskSoftUpdate(BaseModel):
     location_lon: Decimal | None = None
     ai_context_text: str | None = None
     is_focus: bool | None = None
+
+    @field_validator('due_date', mode='before')
+    def ensure_brazil_timezone(cls, v):
+        if v is None:
+            return v
+
+        if isinstance(v, str):
+            v = datetime.fromisoformat(v)
+
+        if v.tzinfo:
+            return v.astimezone(ZoneInfo('America/Sao_Paulo'))
+
+        return v.replace(tzinfo=ZoneInfo('America/Sao_Paulo'))
