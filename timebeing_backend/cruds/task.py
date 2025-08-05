@@ -18,9 +18,9 @@ class CRUDTask:
         logger.info(
             'Criando task %s para usuário %s', task.model_dump(), user_id
         )
-        task_data = task.model_dump()
-        task_data['user_id'] = user_id
-        db_task = Task(**task_data)
+        db_task = task.model_dump()
+        db_task['user_id'] = user_id
+        db_task = Task(**db_task)
 
         if task.due_date and task.notify_at:
             await schedule_notification(
@@ -92,7 +92,7 @@ class CRUDTask:
         task: TaskSoftUpdate,
         user_id: str,
     ):
-        db_task = await session.scalar(
+        db_task: Task | None = await session.scalar(
             Select(Task).where(Task.id == task_id, Task.user_id == user_id)
         )
 
@@ -104,6 +104,8 @@ class CRUDTask:
                 status_code=HTTPStatus.NOT_FOUND, detail='Task not found'
             )
 
+        title_task = db_task.title
+
         logger.info(
             'Atualizando task %s para %s do usuário %s',
             task_id,
@@ -113,6 +115,14 @@ class CRUDTask:
 
         for key, value in task.model_dump(exclude_unset=True).items():
             setattr(db_task, key, value)
+
+        if db_task.due_date and db_task.notify_at:
+            await schedule_notification(
+                task_title=title_task,
+                due_date=db_task.due_date,
+                notify_at=db_task.notify_at,
+                user_id=user_id,
+            )
 
         session.add(db_task)
         await session.commit()
