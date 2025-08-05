@@ -13,6 +13,7 @@ class HabitCreate(BaseModel):
 
 class HabitPublic(HabitCreate):
     id: uuid.UUID
+    user_id: str
     created_at: datetime
     updated_at: datetime
 

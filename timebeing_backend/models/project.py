@@ -30,6 +30,7 @@ class Project(TimestampMixin):
     description: Mapped[str | None] = mapped_column(nullable=True)
     status: Mapped[ProjectStatus]
     ai_context_text: Mapped[str | None] = mapped_column(nullable=True)
+    user_id: Mapped[str] = mapped_column(nullable=False)
     priority: Mapped[ProjectPriorityState] = mapped_column(
         default=ProjectPriorityState.baixa
     )

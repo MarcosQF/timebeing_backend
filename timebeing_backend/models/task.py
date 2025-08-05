@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 import uuid
-from datetime import datetime
+from datetime import datetime, timedelta
 from decimal import Decimal
 from enum import Enum
 
-from sqlalchemy import UUID, Boolean, ForeignKey, Numeric
+from sqlalchemy import UUID, Boolean, ForeignKey, Interval, Numeric
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.types import DateTime
 
@@ -26,6 +26,9 @@ class Task(TimestampMixin):
     title: Mapped[str]
     description: Mapped[str | None] = mapped_column(nullable=True)
     due_date: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    notify_at: Mapped[timedelta | None] = mapped_column(
+        Interval, nullable=True
+    )
     scheduled_start_time: Mapped[datetime | None] = mapped_column(
         DateTime, nullable=True
     )
@@ -49,6 +52,7 @@ class Task(TimestampMixin):
     project_id: Mapped[uuid.UUID | None] = mapped_column(
         ForeignKey('project.id'), nullable=True
     )
+    user_id: Mapped[str] = mapped_column(nullable=False)
     is_focus: Mapped[bool] = mapped_column(
         Boolean, default=False, server_default='false', nullable=False
     )

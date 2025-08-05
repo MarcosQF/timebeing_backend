@@ -1,21 +1,21 @@
-import logging
 from contextlib import asynccontextmanager
 
 from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from timebeing_backend.routers import habit, project, task
+from timebeing_backend.scheduler.manager import start_scheduler, stop_scheduler
 
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
-logger.addHandler(logging.StreamHandler())
+from .logger import logger  # Import configured logger
 
 
 @asynccontextmanager
 async def lifespan(app):
     logger.info('Iniciando Aplicação')
+    start_scheduler()
     yield
     logger.info('Encerrando Aplicação')
+    stop_scheduler()
 
 
 router = APIRouter(prefix='/api/v1')
@@ -26,7 +26,6 @@ app.add_middleware(
     allow_origins=[
         'http://localhost:3000',
         'http://127.0.0.1:3000',
-        'http://localhost:8080',
     ],
     allow_credentials=True,
     allow_methods=['*'],

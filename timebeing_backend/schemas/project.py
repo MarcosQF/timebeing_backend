@@ -24,6 +24,7 @@ class ProjectPublic(BaseModel):
     description: str | None
     status: ProjectStatus
     priority: ProjectPriorityState
+    user_id: str
     created_at: datetime
     updated_at: datetime
     ai_context_text: str | None
