@@ -34,6 +34,7 @@ app.add_middleware(
         'https://www.timebeing.space',
         'http://localhost',
         'https://localhost',
+        'http://177.154.180.9'
     ],
     allow_credentials=True,
     allow_methods=['*'],
