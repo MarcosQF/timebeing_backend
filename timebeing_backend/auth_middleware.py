@@ -118,6 +118,7 @@ async def get_current_user_id(request: Request) -> str:
                 authorized_parties=[
                     'http://localhost:3000',
                     'http://127.0.0.1:3000',
+                    'http://177.154.180.9:3000',
                 ],
                 jwt_key=jwt_key,
             ),
